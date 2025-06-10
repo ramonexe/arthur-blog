@@ -1,6 +1,8 @@
-import { Container, Title, ShortUrl, DeleteButton } from "./LinkCard.styles";
+import { Container, Title, ShortUrl } from "./LinkCard.styles";
 import { Link } from "../api/linkService";
 import styled from "styled-components";
+import { Button } from "dynamix-button";
+import { Trash } from 'lucide-react';
 
 interface Props {
     link: Link;
@@ -21,7 +23,7 @@ export default function LinkCard({ link, onDelete }: Props) {
                 <strong>Data de Criação:</strong>
                 <p>{new Date(link.dataCriacao).toLocaleString()}</p>
             </DataCriacao>
-            <DeleteButton onClick={() => onDelete(link.codigo)}>Excluir</DeleteButton>
+            <Button icon={<Trash />} onClick={() => onDelete(link.codigo)}>Excluir</Button>
         </Container>
     );
 }
@@ -40,5 +42,6 @@ const DataCriacao = styled.div`
         p {
             margin: 0;
             margin-left: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 `;

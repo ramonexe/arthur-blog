@@ -18,13 +18,3 @@ export const ShortUrl = styled.a`
   text-decoration: none;
   display: block;
 `;
-
-export const DeleteButton = styled.button`
-  margin-top: 0.5rem;
-  background: #e74c3c;
-  color: white;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-`;

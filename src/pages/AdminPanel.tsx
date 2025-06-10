@@ -1,9 +1,9 @@
-// src/pages/AdminPanel.tsx
 import { useEffect, useState } from "react";
 import { encurtarLink, listarLinks, excluirLink, Link } from "../api/linkService";
 import LinkCard from "../components/LinkCard";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { Button } from "dynamix-button";
 
 export default function AdminPanel() {
   const [url, setUrl] = useState("");
@@ -54,7 +54,7 @@ export default function AdminPanel() {
         placeholder="Cole a URL aqui"
         style={{ padding: "0.5rem", width: "300px", marginRight: "1rem" }}
       />
-      <button onClick={handleSubmit}>Encurtar</button>
+      <Button onClick={handleSubmit}>Encurtar</Button>
 
       {links.map((link) => (
         <LinkCard key={link.codigo} link={link} onDelete={handleDelete} />
