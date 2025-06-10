@@ -1,12 +1,17 @@
-// src/components/LinkCard.styles.ts
 import styled from "styled-components";
 
 export const Container = styled.div`
+  text-align: left;
   background: #fff;
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1rem;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+`;
+
+export const Subtitle = styled.h1`
+  margin: 0 0 0.5rem;
+  font-weight: 800;
 `;
 
 export const Title = styled.h4`

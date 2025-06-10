@@ -11,12 +11,14 @@ export interface Link {
   id: number;
   codigo: string;
   urlOriginal: string;
+  titulo?: string;
   dataCriacao: string;
 }
 
-export const encurtarLink = async (url: string): Promise<string> => {
-  const response = await api.post("/encurtar", url, {
-    headers: { "Content-Type": "text/plain" },
+export const encurtarLink = async (url: string, titulo?: string): Promise<string> => {
+  const payload = { urlOriginal: url, titulo };
+  const response = await api.post("/encurtar", payload, {
+    headers: { "Content-Type": "application/json" },
   });
   return response.data;
 };
