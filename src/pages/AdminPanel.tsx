@@ -65,8 +65,8 @@ export default function AdminPanel() {
                     placeholder="Buscar por URL, código ou título"
                 />
             </div>
-            <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem", justifyContent: "center", width: "100%" }}>
-                <Input
+            <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem", justifyContent: "center", alignItems: "center" }}>
+                <URLinput
                     value={url}
                     onChange={e => setUrl(e.target.value)}
                     placeholder="Cole a URL aqui"
@@ -88,20 +88,32 @@ export default function AdminPanel() {
     );
 }
 
-const Input = styled.input`
-  border: 1px solid #ccc;
+const URLinput = styled.input`
+  border: 1px solid #ffffff;
   border-radius: 4px;
   font-size: 1rem;
-  height: 2.5rem;
+  height: 3rem;
+  width: 50%;
   padding: 0 0.5rem;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+`;
+
+const Input = styled.input`
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  font-size: 1rem;
+  height: 3rem;
+  padding: 0 0.5rem;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 `;
 
 const Searchinput = styled.input`
-  border: 1px solid #9b9b9b;
+  border: 1px solid #ffffff;
   border-radius: 50px;
   font-size: 1rem;
   height: 2.5rem;
   width: 100%;
   padding: 0 0.5rem;
   margin-bottom: 1rem;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 `;
