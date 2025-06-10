@@ -1,20 +1,44 @@
 import { Container, Title, ShortUrl, DeleteButton } from "./LinkCard.styles";
 import { Link } from "../api/linkService";
+import styled from "styled-components";
 
 interface Props {
-  link: Link;
-  onDelete: (codigo: string) => void;
+    link: Link;
+    onDelete: (codigo: string) => void;
 }
 
 export default function LinkCard({ link, onDelete }: Props) {
-  return (
-    <Container>
-      <Title>{link.urlOriginal}</Title>
-      <ShortUrl href={`http://localhost:8080/${link.codigo}`} target="_blank" rel="noopener noreferrer">
-        http://localhost:8080/{link.codigo}
-      </ShortUrl>
-      <p>{new Date(link.dataCriacao).toLocaleString()}</p>
-      <DeleteButton onClick={() => onDelete(link.codigo)}>Excluir</DeleteButton>
-    </Container>
-  );
+    return (
+        <Container>
+            <Title>URL: {link.urlOriginal}</Title>
+            <Short>
+                <strong>Link Encurtado:</strong>
+                <ShortUrl href={`http://localhost:8080/${link.codigo}`} target="_blank" rel="noopener noreferrer">
+                    http://localhost:8080/{link.codigo}
+                </ShortUrl>
+            </Short>
+            <DataCriacao>
+                <strong>Data de Criação:</strong>
+                <p>{new Date(link.dataCriacao).toLocaleString()}</p>
+            </DataCriacao>
+            <DeleteButton onClick={() => onDelete(link.codigo)}>Excluir</DeleteButton>
+        </Container>
+    );
 }
+
+const Short = styled.div`
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #333;
+`;
+
+const DataCriacao = styled.div`
+    display: flex;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.5rem;
+        p {
+            margin: 0;
+            margin-left: 0.5rem;
+        }
+`;
