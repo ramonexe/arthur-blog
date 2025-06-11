@@ -15,10 +15,10 @@ export default function Inicio() {
         <>
             <Banner>
                 <TrueFocus
-                    sentence="ARTHUR GARCIA CRYPTO"
+                    sentence="ARTHUR GARCIA"
                     manualMode={false}
                     blurAmount={5}
-                    borderColor="red"
+                    borderColor="blue"
                     animationDuration={2}
                     pauseBetweenAnimations={1}
                 />
@@ -36,19 +36,11 @@ export default function Inicio() {
 }
 
 const Banner = styled.div`
-  background: url('/banner.jpg') no-repeat center center;
-  background-size: cover;
-  height: 300px;
+  background: #08080883;
   display: flex;
-  align-items: center;
+  padding: 1rem;
+  align-items: flex-start;
   justify-content: center;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-  
-  h1 {
-    font-size: 3rem;
-    margin: 0;
-  }
 `;
 
 const Container = styled.div`

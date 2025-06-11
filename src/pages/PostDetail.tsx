@@ -33,7 +33,7 @@ export default function PostDetail() {
           <iframe
             src={post.youtubeUrl.replace('watch?v=', 'embed/')}
             title="YouTube video"
-            frameBorder="5"
+            frameBorder="2"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
@@ -53,13 +53,6 @@ const Container = styled.div`
 `;
 
 const Title = styled.h1`
-  margin-bottom: 1rem;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
   margin-bottom: 1rem;
 `;
 
