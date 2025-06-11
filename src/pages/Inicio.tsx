@@ -1,12 +1,56 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import { listarPosts, Post } from '../api/PostService';
+import PostCard from '../components/PostCard';
+import styled from 'styled-components';
 
-const Inicio: React.FC = () => {
+export default function Inicio() {
+    const [posts, setPosts] = useState<Post[]>([]);
+    useEffect(() => {
+        listarPosts()
+            .then(data => setPosts(data))
+            .catch(() => { });
+    }, []);
     return (
-        <div style={{ padding: '2rem', textAlign: 'center' }}>
-            <h1>Bem-vindo ao Blog!</h1>
-            <p>Esta é a página inicial.</p>
-        </div>
+        <>
+        <Banner>
+            <h1>Arthur Garcia</h1>
+        </Banner>
+            <Container>
+                <h1>Posts</h1>
+                <Grid>
+                    {posts.map(post => (
+                        <PostCard key={post.id} post={post} />
+                    ))}
+                </Grid>
+            </Container>
+        </>
     );
-};
+}
 
-export default Inicio;
+const Banner = styled.div`
+  background: url('/banner.jpg') no-repeat center center;
+  background-size: cover;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  
+  h1 {
+    font-size: 3rem;
+    margin: 0;
+  }
+`;
+
+const Container = styled.div`
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+`;
