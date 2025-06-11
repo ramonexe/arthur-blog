@@ -6,12 +6,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Button } from "dynamix-button";
 import styled from "styled-components";
 import { Plus } from "lucide-react";
+import { useDebounce } from '../hooks/useDebounce'
 
 export default function AdminPanel() {
     const [url, setUrl] = useState("");
     const [titulo, setTitulo] = useState("");
     const [search, setSearch] = useState("");
+    const [codigo, setCodigo] = useState("");
     const [links, setLinks] = useState<Link[]>([]);
+    const debouncedSearch = useDebounce(search, 500)
 
     const fetchLinks = async () => {
         try {
@@ -23,16 +26,21 @@ export default function AdminPanel() {
     };
 
     useEffect(() => {
-        fetchLinks();
-    }, []);
+        fetchLinks()
+    }, [debouncedSearch])
 
     const handleSubmit = async () => {
-        if (!url) return;
+        if (!url || !codigo) {
+            toast.error("URL e Código são obrigatórios.");
+            return;
+        }
         try {
-            await encurtarLink(url, titulo);
+            await encurtarLink(url, codigo, titulo);
+            console.log(url, codigo, titulo);
             toast.success("Link encurtado!");
             setUrl("");
             setTitulo("");
+            setCodigo("");
             fetchLinks();
         } catch {
             toast.error("Erro ao encurtar.");
@@ -56,7 +64,7 @@ export default function AdminPanel() {
     );
 
     return (
-        <div style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto", textAlign: "center" }}>
+        <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
             <h1>Encurtar Link</h1>
             <div style={{ marginBottom: "1rem", margin: "0 auto" }}>
                 <Searchinput
@@ -65,18 +73,25 @@ export default function AdminPanel() {
                     placeholder="Buscar por URL, código ou título"
                 />
             </div>
-            <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem", justifyContent: "center", alignItems: "center" }}>
-                <URLinput
+            <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem", justifyContent: "left", alignItems: "center" }}>
+                <Input
                     value={url}
                     onChange={e => setUrl(e.target.value)}
                     placeholder="Cole a URL aqui"
+                    required
                 />
                 <Input
                     value={titulo}
                     onChange={e => setTitulo(e.target.value)}
                     placeholder="Título (opcional)"
                 />
-                <Button icon={<Plus />} onClick={handleSubmit}>Encurtar</Button>
+                <Input
+                    value={codigo}
+                    onChange={e => setCodigo(e.target.value)}
+                    placeholder="Codigo"
+                    required
+                />
+                <Button icon={<Plus />} onClick={handleSubmit} disabled={!url || !codigo}>Encurtar</Button>
             </div>
 
             {filteredLinks.map(link => (
@@ -87,16 +102,6 @@ export default function AdminPanel() {
         </div>
     );
 }
-
-const URLinput = styled.input`
-  border: 1px solid #ffffff;
-  border-radius: 4px;
-  font-size: 1rem;
-  height: 3rem;
-  width: 50%;
-  padding: 0 0.5rem;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-`;
 
 const Input = styled.input`
   border: 1px solid #ffffff;

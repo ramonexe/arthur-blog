@@ -8,6 +8,7 @@ const api = axios.create({
 });
 
 export interface Link {
+  cliques: number;
   id: number;
   codigo: string;
   urlOriginal: string;
@@ -15,8 +16,8 @@ export interface Link {
   dataCriacao: string;
 }
 
-export const encurtarLink = async (url: string, titulo?: string): Promise<string> => {
-  const payload = { urlOriginal: url, titulo };
+export const encurtarLink = async (url: string, codigo: string, titulo?: string): Promise<string> => {
+  const payload = { urlOriginal: url, codigo, titulo };
   const response = await api.post("/encurtar", payload, {
     headers: { "Content-Type": "application/json" },
   });
