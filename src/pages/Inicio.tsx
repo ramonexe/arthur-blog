@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { listarPosts, Post } from '../api/PostService';
 import PostCard from '../components/PostCard';
 import styled from 'styled-components';
+import TrueFocus from '../components/TrueFocus';
 
 export default function Inicio() {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -12,9 +13,16 @@ export default function Inicio() {
     }, []);
     return (
         <>
-        <Banner>
-            <h1>Arthur Garcia</h1>
-        </Banner>
+            <Banner>
+                <TrueFocus
+                    sentence="ARTHUR GARCIA CRYPTO"
+                    manualMode={false}
+                    blurAmount={5}
+                    borderColor="red"
+                    animationDuration={2}
+                    pauseBetweenAnimations={1}
+                />
+            </Banner>
             <Container>
                 <h1>Posts</h1>
                 <Grid>

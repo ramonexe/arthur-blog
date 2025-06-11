@@ -4,6 +4,7 @@ export const Container = styled.div`
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  padding-bottom: 1rem;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s;
@@ -30,7 +31,7 @@ export const Snippet = styled.p`
   margin: 0;
   color: #555;
   font-size: 0.9rem;
-  height: 2.7rem;
+  height: 3.2rem;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
