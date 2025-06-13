@@ -3,15 +3,14 @@ import styled from "styled-components";
 export const Container = styled.div`
   background:rgb(7, 8, 12);
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
-  padding-bottom: 1rem;
+  box-shadow: 0 0 4px rgba(0, 119, 255, 0.09);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s;
+  
   &:hover {
-    border: 1px solid rgba(0, 102, 255, 0.5);
-    transform: translateY(-4px);
-    transition: border 0.4s ease-in-out, transform 0.2s ease-in-out;
+    border: 1px solid #0e1933;
+    box-shadow: 0 0 10px rgba(0, 119, 255, 0.49);
+    transition: box-shadow 0.2s;
   }
 `;
 
@@ -33,7 +32,9 @@ export const Snippet = styled.p`
   margin: 0;
   color: #555;
   font-size: 0.9rem;
-  height: 3.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
 `;

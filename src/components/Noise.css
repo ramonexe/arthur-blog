@@ -1,0 +1,10 @@
+.noise-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 80vh;
+  z-index: -1;
+  /* Exemplo de cor de sobreposição: ajuste a cor e opacidade como desejar */
+  background-color: rgb(0, 9, 24);
+}

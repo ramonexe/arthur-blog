@@ -2,7 +2,9 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   text-align: left;
-  background: #fff;
+  border: 1px solid #0e1933;
+  background:rgb(7, 8, 12);
+  color: #ffffff;
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1rem;

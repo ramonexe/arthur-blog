@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { criarPost } from '../api/PostService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Button } from 'dynamix-button';
 
 export default function CreatePost() {
     const [titulo, setTitulo] = useState('');
@@ -12,15 +13,14 @@ export default function CreatePost() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
+
         if (!titulo || !conteudo) {
             toast.error('Título e conteúdo são obrigatórios.');
             return;
         }
         try {
             setLoading(true);
-            // criar post
             await criarPost({ titulo, conteudo, youtubeUrl });
             toast.success('Post criado com sucesso!');
             navigate('/');
@@ -37,32 +37,32 @@ export default function CreatePost() {
             <h1>Criar Post</h1>
             <Form onSubmit={handleSubmit}>
                 <label>
-                    Título
                     <input
                         type="text"
                         value={titulo}
                         onChange={e => setTitulo(e.target.value)}
+                        placeholder='Título do post'
                     />
                 </label>
                 <label>
-                    Conteúdo
                     <textarea
                         rows={6}
                         value={conteudo}
                         onChange={e => setConteudo(e.target.value)}
+                        placeholder='Conteúdo do post'
                     />
                 </label>
                 <label>
-                    URL do YouTube (opcional)
                     <input
                         type="text"
                         value={youtubeUrl}
                         onChange={e => setYoutubeUrl(e.target.value)}
+                        placeholder='URL do vídeo no YouTube'
                     />
                 </label>
-                <button type="submit" disabled={loading}>
+                <Button onClick={handleSubmit} disabled={loading}>
                     {loading ? 'Enviando...' : 'Publicar'}
-                </button>
+                </Button>
             </Form>
             <ToastContainer />
         </Container>
@@ -70,8 +70,6 @@ export default function CreatePost() {
 }
 
 const Container = styled.div`
-  padding: 2rem;
-  max-width: 600px;
   margin: 0 auto;
 `;
 
@@ -89,7 +87,9 @@ const Form = styled.form`
       margin-top: 0.5rem;
       padding: 0.5rem;
       font-size: 1rem;
-      border: 1px solid #ccc;
+      border: 1px solid #123788;
+      background:rgb(7, 8, 12);
+      color: #ffffff;
       border-radius: 4px;
     }
   }

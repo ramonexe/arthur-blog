@@ -9,7 +9,7 @@
 
 .focus-word {
   position: relative;
-  font-size: 2rem;
+  font-size: 5vw;
   font-weight: 900;
   cursor: pointer;
   transition:

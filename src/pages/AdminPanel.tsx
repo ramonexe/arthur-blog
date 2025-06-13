@@ -7,6 +7,7 @@ import { Button } from "dynamix-button";
 import styled from "styled-components";
 import { Plus } from "lucide-react";
 import { useDebounce } from '../hooks/useDebounce'
+import CreatePost from "./CreatePost";
 
 export default function AdminPanel() {
     const [url, setUrl] = useState("");
@@ -64,56 +65,65 @@ export default function AdminPanel() {
     );
 
     return (
-        <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
-            <h1>Encurtar Link</h1>
-            <div style={{ marginBottom: "1rem", margin: "0 auto" }}>
-                <Searchinput
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    placeholder="Buscar por URL, código ou título"
-                />
+        <div style={{ display: "flex", padding: "2rem", maxWidth: "1200px", margin: "0 auto", textAlign: "center"}}>
+            <div style={{ margin: "0 auto", textAlign: "center" }}>
+                <CreatePost />
             </div>
-            <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem", justifyContent: "left", alignItems: "center" }}>
-                <Input
-                    value={url}
-                    onChange={e => setUrl(e.target.value)}
-                    placeholder="Cole a URL aqui"
-                    required
-                />
-                <Input
-                    value={titulo}
-                    onChange={e => setTitulo(e.target.value)}
-                    placeholder="Título (opcional)"
-                />
-                <Input
-                    value={codigo}
-                    onChange={e => setCodigo(e.target.value)}
-                    placeholder="Codigo"
-                    required
-                />
-                <Button icon={<Plus />} onClick={handleSubmit} disabled={!url || !codigo}>Encurtar</Button>
+            <div style={{ margin: "0 auto", textAlign: "center" }}>
+                <h1>Encurtar Link</h1>
+                <div style={{ marginBottom: "1rem", margin: "0 auto" }}>
+                    <Searchinput
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                        placeholder="Buscar por URL, código ou título"
+                    />
+                </div>
+                <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem", justifyContent: "left", alignItems: "center" }}>
+                    <Input
+                        value={url}
+                        onChange={e => setUrl(e.target.value)}
+                        placeholder="Cole a URL aqui"
+                        required
+                    />
+                    <Input
+                        value={titulo}
+                        onChange={e => setTitulo(e.target.value)}
+                        placeholder="Título (opcional)"
+                    />
+                    <Input
+                        value={codigo}
+                        onChange={e => setCodigo(e.target.value)}
+                        placeholder="Codigo"
+                        required
+                    />
+                    <Button icon={<Plus />} onClick={handleSubmit} disabled={!url || !codigo}>Encurtar</Button>
+                </div>
+
+                {filteredLinks.map(link => (
+                    <LinkCard key={link.codigo} link={link} onDelete={handleDelete} />
+                ))}
+
+                <ToastContainer />
             </div>
-
-            {filteredLinks.map(link => (
-                <LinkCard key={link.codigo} link={link} onDelete={handleDelete} />
-            ))}
-
-            <ToastContainer />
         </div>
     );
 }
 
 const Input = styled.input`
-  border: 1px solid #ffffff;
+  border: 1px solid #123788;
+  background:rgb(7, 8, 12);
+  color: #ffffff;
   border-radius: 4px;
   font-size: 1rem;
   height: 3rem;
   padding: 0 0.5rem;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px rgba(20, 24, 37, 0.1);
 `;
 
 const Searchinput = styled.input`
-  border: 1px solid #ffffff;
+  border: 1px solid #0e1933;
+  background:rgb(7, 8, 12);
+  color: #ffffff;
   border-radius: 50px;
   font-size: 1rem;
   height: 2.5rem;

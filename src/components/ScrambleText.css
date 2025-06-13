@@ -1,0 +1,12 @@
+.text-block {
+  max-width: 1200px;
+  font-size: 1.2vw;
+  color: #bbbbbb;
+  text-align: center;
+}
+
+.char {
+  will-change: transform;
+  display: inline-block;
+  font-weight: lighter;
+}
