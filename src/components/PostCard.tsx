@@ -6,7 +6,6 @@ interface Props { post: Post; }
 
 export default function PostCard({ post }: Props) {
   const navigate = useNavigate();
-  // extrai ID do YouTube para montar thumbnail
   const getYouTubeId = (url: string): string | null => {
     try {
       const u = new URL(url);

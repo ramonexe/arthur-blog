@@ -7,14 +7,20 @@ import ScrambledText from '../components/ScrambleText';
 import Noise from '../components/Noise';
 import { Button } from 'dynamix-button';
 import { BookOpenText, MessageCircleMore, Youtube } from 'lucide-react';
+import { BarLoader } from 'react-spinners';
 
 export default function Inicio() {
+    const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
     useEffect(() => {
         listarPosts()
             .then(data => setPosts(data))
             .catch(() => { });
+        setLoading(false);
     }, []);
+
+    if (loading) return <LoadingContainer><BarLoader color="#00c3ff" /></LoadingContainer>;
+
     return (
         <>
             <Banner>
@@ -43,23 +49,41 @@ export default function Inicio() {
                 />
             </Banner >
             <Container>
-                <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center', marginBottom: '2rem', alignItems: 'center' }}>
-                    <Button alwaysShowText icon={<Youtube/>} size='lg'
-                    backgroundColor='#FF0000'
-                    hoverBackgroundColor='#FF4500'
-                    activeBackgroundColor='#8f2310'
-                    >YOUTUBE</Button>
-                    <Button alwaysShowText icon={<BookOpenText/>} size='lg'
-                    backgroundColor='#105db4'
-                    hoverBackgroundColor='#00c3ff'
-                    activeBackgroundColor='#123788'
-                    >CURSO</Button>
-                    <Button alwaysShowText icon={<MessageCircleMore/>} size='lg'
-                    backgroundColor='#25D366'
-                    hoverBackgroundColor='#128C7E'
-                    activeBackgroundColor='#075E54'
-                    >WHATSAPP</Button>
-                </div>
+                <ButtonsWrapper>
+                    <Button
+                        fullWidth
+                        alwaysShowText
+                        icon={<Youtube />}
+                        size="lg"
+                        backgroundColor="#FF0000"
+                        hoverBackgroundColor="#FF4500"
+                        activeBackgroundColor="#8f2310"
+                    >
+                        YOUTUBE
+                    </Button>
+                    <Button
+                        fullWidth
+                        alwaysShowText
+                        icon={<BookOpenText />}
+                        size="lg"
+                        backgroundColor="#105db4"
+                        hoverBackgroundColor="#00c3ff"
+                        activeBackgroundColor="#123788"
+                    >
+                        CURSO
+                    </Button>
+                    <Button
+                        fullWidth
+                        alwaysShowText
+                        icon={<MessageCircleMore />}
+                        size="lg"
+                        backgroundColor="#25D366"
+                        hoverBackgroundColor="#128C7E"
+                        activeBackgroundColor="#075E54"
+                    >
+                        WHATSAPP
+                    </Button>
+                </ButtonsWrapper>
                 <h3>OPORTUNIDADES RECENTES</h3>
                 <Grid>
                     {posts.map(post => (
@@ -71,6 +95,26 @@ export default function Inicio() {
     );
 }
 
+const ButtonsWrapper = styled.div`
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+`
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
 const Banner = styled.div`
     background: #08080883;
     display: flex;
@@ -80,6 +124,10 @@ const Banner = styled.div`
     flex-direction: column;
     border-bottom: 4px solid;
     border-image: linear-gradient(90deg, #123788, #00c3ff, #123788) 1;
+
+    @media (max-width: 768px) {
+        padding: 0;
+    }
 `;
 
 const Container = styled.div`

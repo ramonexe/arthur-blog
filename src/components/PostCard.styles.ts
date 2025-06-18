@@ -12,12 +12,20 @@ export const Container = styled.div`
     box-shadow: 0 0 10px rgba(0, 119, 255, 0.49);
     transition: box-shadow 0.2s;
   }
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 export const Image = styled.img`
   width: 100%;
   height: 200px;
   object-fit: cover;
+
+  @media (max-width: 600px) {
+    height: 150px;
+  }
 `;
 
 export const Content = styled.div`

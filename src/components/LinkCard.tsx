@@ -26,7 +26,7 @@ export default function LinkCard({ link, onDelete }: Props) {
       <p style={{ fontSize: "0.8rem", color: "#666" }}>
         Data de criação: {new Date(link.dataCriacao).toLocaleString()} <br/> Cliques: {link.cliques}
       </p>
-      <Button icon={<Trash />} onClick={() => onDelete(link.codigo)}>Excluir</Button>
+      <Button backgroundColor="#0084ff" hoverBackgroundColor="#0060b9" activeBackgroundColor="#004381" icon={<Trash />} onClick={() => onDelete(link.codigo)}>Excluir</Button>
     </Container>
   );
 }

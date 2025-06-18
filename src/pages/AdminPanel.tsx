@@ -96,7 +96,7 @@ export default function AdminPanel() {
                         placeholder="Codigo"
                         required
                     />
-                    <Button icon={<Plus />} onClick={handleSubmit} disabled={!url || !codigo}>Encurtar</Button>
+                    <Button backgroundColor="#0084ff" hoverBackgroundColor="#0060b9" activeBackgroundColor="#004381" icon={<Plus />} onClick={handleSubmit} disabled={!url || !codigo}>Encurtar</Button>
                 </div>
 
                 {filteredLinks.map(link => (

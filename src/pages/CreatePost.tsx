@@ -60,7 +60,7 @@ export default function CreatePost() {
                         placeholder='URL do vídeo no YouTube'
                     />
                 </label>
-                <Button onClick={handleSubmit} disabled={loading}>
+                <Button backgroundColor="#0084ff" hoverBackgroundColor="#0060b9" activeBackgroundColor="#004381" onClick={handleSubmit} disabled={loading}>
                     {loading ? 'Enviando...' : 'Publicar'}
                 </Button>
             </Form>

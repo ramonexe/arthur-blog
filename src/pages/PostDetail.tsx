@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from 'dynamix-button';
 import { ArrowLeft } from 'lucide-react';
+import { BarLoader } from 'react-spinners';
 
 export default function PostDetail() {
   const { id } = useParams<{ id: string }>();
@@ -21,12 +22,12 @@ export default function PostDetail() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <p>Carregando...</p>;
+  if (loading) return <LoadingContainer><BarLoader color="#00c3ff" /></LoadingContainer>;
   if (!post) return <p>Post não encontrado.</p>;
 
   return (
     <Container>
-      <Button icon={<ArrowLeft />} onClick={() => navigate(-1)}>Voltar</Button>
+      <Button backgroundColor="#0084ff" hoverBackgroundColor="#0060b9" activeBackgroundColor="#004381" icon={<ArrowLeft />} onClick={() => navigate(-1)}>Voltar</Button>
       <Title>{post.titulo}</Title>
       {post.youtubeUrl && (
         <VideoWrapper>
@@ -44,6 +45,13 @@ export default function PostDetail() {
     </Container>
   );
 }
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
 
 const Container = styled.div`
   padding: 2rem;

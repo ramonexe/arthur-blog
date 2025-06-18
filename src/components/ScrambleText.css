@@ -3,6 +3,10 @@
   font-size: 1.2vw;
   color: #bbbbbb;
   text-align: center;
+
+  @media (max-width: 600px) {
+    font-size: 2.5vw;
+  }
 }
 
 .char {

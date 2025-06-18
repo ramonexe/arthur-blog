@@ -1,6 +1,5 @@
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import Inicio from './pages/Inicio'
-import CreatePost from './pages/CreatePost'
 import PostDetail from './pages/PostDetail'
 import AdminPanel from './pages/AdminPanel'
 import { Button } from 'dynamix-button'
@@ -24,7 +23,7 @@ export default function App() {
         <Route path="/admin" element={<AdminPanel />} />
       </Routes>
       <FixedButton>
-        <Button onClick={() => navigate('/admin')} icon={<Bolt />}>Admin</Button>
+        <Button backgroundColor="#0084ff" hoverBackgroundColor="#0060b9" activeBackgroundColor="#004381" onClick={() => navigate('/admin')} icon={<Bolt />}>Admin</Button>
       </FixedButton>
     </ClickSpark>
   )
