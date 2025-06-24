@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 import { listarPosts, Post } from '../api/PostService';
 import PostCard from '../components/PostCard';
 import styled from 'styled-components';
-import TrueFocus from '../components/TrueFocus';
-import ScrambledText from '../components/ScrambleText';
-import Noise from '../components/Noise';
+import TrueFocus from '../components/Layout/TrueFocus';
+import ScrambledText from '../components/Layout/ScrambleText';
+import Noise from '../components/Layout/Noise';
 import { Button } from 'dynamix-button';
 import { BookOpenText, MessageCircleMore, Youtube } from 'lucide-react';
 import { BarLoader } from 'react-spinners';
+import { Helmet } from 'react-helmet'
+import AnimatedContent from '../components/Layout/AnimatedContent';
+import ShinyText from '../components/Layout/ShinyText';
 
 export default function Inicio() {
     const [loading, setLoading] = useState(true);
@@ -23,6 +26,10 @@ export default function Inicio() {
 
     return (
         <>
+            <Helmet>
+                <title>Início – Arthur Garcia Blog</title>
+                <meta name="description" content="ARTHUR GARCIA CRYPTO – NFTs, Airdrops e renda extra." />
+            </Helmet>
             <Banner>
                 <TrueFocus
                     sentence="ARTHUR GARCIA CRYPTO"
@@ -38,7 +45,7 @@ export default function Inicio() {
                     duration={0.5}
                     speed={0.3}
                     scrambleChars={".:"}>
-                    POR DENTRO DE TUDO SOBRE NFTS, AIRDROPS E RENDA EXTRA
+                    QUER POUPAR SEU TEMPO EM CRYPTO E NÃO PERDER NENHUMA CALL? <br /> ACOMPANHE AGORA E RECEBA DICAS EXCLUSIVAS QUASE TODOS OS DIAS!
                 </ScrambledText>
                 <Noise
                     patternSize={250}
@@ -55,41 +62,58 @@ export default function Inicio() {
                         alwaysShowText
                         icon={<Youtube />}
                         size="lg"
-                        backgroundColor="#FF0000"
-                        hoverBackgroundColor="#FF4500"
+                        backgroundColor="#131518"
+                        borderColor='#e93630b2'
+                        hoverBackgroundColor="#1d2125"
                         activeBackgroundColor="#8f2310"
                     >
-                        YOUTUBE
+                        <ShinyText text="YOUTUBE" disabled={false} speed={3} className='custom-class' />
                     </Button>
                     <Button
                         fullWidth
                         alwaysShowText
                         icon={<BookOpenText />}
                         size="lg"
-                        backgroundColor="#105db4"
-                        hoverBackgroundColor="#00c3ff"
+                        backgroundColor="#131518"
+                        borderColor='#00c3ffb3'
+                        hoverBackgroundColor="#1d2125"
                         activeBackgroundColor="#123788"
+                        onClick={() => window.open('/curso', '_blank')}
                     >
-                        CURSO
+                        <ShinyText text="CURSO" disabled={false} speed={3} className='custom-class' />
                     </Button>
                     <Button
                         fullWidth
                         alwaysShowText
                         icon={<MessageCircleMore />}
                         size="lg"
-                        backgroundColor="#25D366"
-                        hoverBackgroundColor="#128C7E"
+                        backgroundColor="#131518"
+                        borderColor='#128c7ebc'
+                        hoverBackgroundColor="#1d2125"
                         activeBackgroundColor="#075E54"
                     >
-                        WHATSAPP
+                        <ShinyText text="WHATSAPP" disabled={false} speed={3} className='custom-class' />
                     </Button>
                 </ButtonsWrapper>
-                <h3>OPORTUNIDADES RECENTES</h3>
-                <Grid>
-                    {posts.map(post => (
-                        <PostCard key={post.id} post={post} />
-                    ))}
-                </Grid>
+                <AnimatedContent
+                    distance={150}
+                    direction="vertical"
+                    reverse={false}
+                    duration={0.5}
+                    ease="power3.out"
+                    initialOpacity={0}
+                    animateOpacity
+                    scale={1.1}
+                    threshold={0.2}
+                    delay={0.1}
+                >
+                    <h3>OPORTUNIDADES RECENTES</h3>
+                    <Grid>
+                        {posts.map(post => (
+                            <PostCard key={post.id} post={post} />
+                        ))}
+                    </Grid>
+                </AnimatedContent>
             </Container>
         </>
     );
@@ -118,7 +142,7 @@ const LoadingContainer = styled.div`
 const Banner = styled.div`
     background: #08080883;
     display: flex;
-    height: 80vh;
+    height: 85vh;
     align-items: center;
     justify-content: center;
     flex-direction: column;

@@ -5,7 +5,8 @@ import AdminPanel from './pages/AdminPanel'
 import { Button } from 'dynamix-button'
 import styled from 'styled-components'
 import { Bolt } from 'lucide-react'
-import ClickSpark from './components/ClickSpark'
+import ClickSpark from './components/Layout/ClickSpark'
+import Curso from './pages/Curso'
 
 export default function App() {
   const navigate = useNavigate()
@@ -19,6 +20,7 @@ export default function App() {
     >
       <Routes>
         <Route path="/" element={<Inicio />} />
+        <Route path="/curso" element={<Curso />} />
         <Route path="/posts/:id" element={<PostDetail />} />
         <Route path="/admin" element={<AdminPanel />} />
       </Routes>

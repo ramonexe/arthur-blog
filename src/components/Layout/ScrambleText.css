@@ -1,8 +1,9 @@
 .text-block {
-  max-width: 1200px;
+  max-width: 1000px;
   font-size: 1.2vw;
   color: #bbbbbb;
   text-align: center;
+  white-space: wrap;
 
   @media (max-width: 600px) {
     font-size: 2.5vw;
