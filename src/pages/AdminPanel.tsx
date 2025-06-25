@@ -6,10 +6,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Button } from "dynamix-button";
 import styled from "styled-components";
 import { Plus } from "lucide-react";
-import { useDebounce } from '../hooks/useDebounce'
-import CreatePost from "./CreatePost";
+import { useDebounce } from '../hooks/useDebounce';
+import { useNavigate } from "react-router-dom";
 
 export default function AdminPanel() {
+    const navigate = useNavigate();
+    // redireciona se não estiver logado
+    useEffect(() => {
+        if (!localStorage.getItem('user')) {
+            navigate('/adm');
+        }
+    }, []);
     const [url, setUrl] = useState("");
     const [titulo, setTitulo] = useState("");
     const [search, setSearch] = useState("");
@@ -65,12 +72,8 @@ export default function AdminPanel() {
     );
 
     return (
-        <div style={{ display: "flex", padding: "2rem", maxWidth: "1200px", margin: "0 auto", textAlign: "center"}}>
+        <ContainerEncurtador>
             <div style={{ margin: "0 auto", textAlign: "center" }}>
-                <CreatePost />
-            </div>
-            <div style={{ margin: "0 auto", textAlign: "center" }}>
-                <h1>Encurtar Link</h1>
                 <div style={{ marginBottom: "1rem", margin: "0 auto" }}>
                     <Searchinput
                         value={search}
@@ -78,7 +81,7 @@ export default function AdminPanel() {
                         placeholder="Buscar por URL, código ou título"
                     />
                 </div>
-                <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem", justifyContent: "left", alignItems: "center" }}>
+                <InputsContainer>
                     <Input
                         value={url}
                         onChange={e => setUrl(e.target.value)}
@@ -96,8 +99,8 @@ export default function AdminPanel() {
                         placeholder="Codigo"
                         required
                     />
-                    <Button backgroundColor="#0084ff" hoverBackgroundColor="#0060b9" activeBackgroundColor="#004381" icon={<Plus />} onClick={handleSubmit} disabled={!url || !codigo}>Encurtar</Button>
-                </div>
+                    <Button backgroundColor="#0084ff" hoverBackgroundColor="#0060b9" activeBackgroundColor="#004381" alwaysShowText fullWidth icon={<Plus />} onClick={handleSubmit} disabled={!url || !codigo}>Encurtar</Button>
+                </InputsContainer>
 
                 {filteredLinks.map(link => (
                     <LinkCard key={link.codigo} link={link} onDelete={handleDelete} />
@@ -105,12 +108,44 @@ export default function AdminPanel() {
 
                 <ToastContainer />
             </div>
-        </div>
+        </ContainerEncurtador>
     );
 }
 
+const InputsContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+`
+
+const ContainerEncurtador = styled.div`
+  padding: 1rem;
+  margin: 10px;
+  background: rgb(7, 8, 12);
+  color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(44, 150, 238, 0.5);
+  
+  h1 {
+    margin-bottom: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+`;
+
 const Input = styled.input`
-  border: 1px solid #123788;
+  border: 1px solid #0084ff;
   background:rgb(7, 8, 12);
   color: #ffffff;
   border-radius: 4px;
@@ -121,7 +156,7 @@ const Input = styled.input`
 `;
 
 const Searchinput = styled.input`
-  border: 1px solid #0e1933;
+  border: 1px solid #0084ff73;
   background:rgb(7, 8, 12);
   color: #ffffff;
   border-radius: 50px;

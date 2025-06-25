@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import ASCIIText from "../components/Layout/AsciiText";
+import ASCIIText from "../components/Layout/ASCIIText";
 import styled from 'styled-components';
 import ShinyText from "../components/Layout/ShinyText";
 import Container from "../components/Layout/ContainerAll";

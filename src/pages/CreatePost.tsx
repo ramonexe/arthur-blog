@@ -70,7 +70,23 @@ export default function CreatePost() {
 }
 
 const Container = styled.div`
-  margin: 0 auto;
+  padding: 1rem;
+  margin: 10px;
+  background: rgb(7, 8, 12);
+  color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(44, 150, 238, 0.5);
+  
+  h1 {
+    margin-bottom: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
 `;
 
 const Form = styled.form`
@@ -87,7 +103,8 @@ const Form = styled.form`
       margin-top: 0.5rem;
       padding: 0.5rem;
       font-size: 1rem;
-      border: 1px solid #123788;
+      width: 70vw;
+      border: 1px solid #0084ff;
       background:rgb(7, 8, 12);
       color: #ffffff;
       border-radius: 4px;
@@ -108,4 +125,10 @@ const Form = styled.form`
       cursor: not-allowed;
     }
   }
+
+    @media (max-width: 768px) {
+        label input, label textarea {
+        width: 100%;
+        }
+    }
 `;
