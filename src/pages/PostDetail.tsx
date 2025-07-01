@@ -81,4 +81,5 @@ const VideoWrapper = styled.div`
 const Content = styled.div`
   line-height: 1.6;
   margin-top: 1rem;
+  white-space: pre-line
 `;
