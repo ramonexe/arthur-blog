@@ -6,17 +6,24 @@ import Dialog from '@mui/material/Dialog';
 import { Bolt } from 'lucide-react';
 import CreatePost from '../../pages/CreatePost';
 import AdminPanel from '../../pages/AdminPanel';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function BasicMenu() {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [openShortener, setOpenShortener] = useState(false);
     const [openCreatePost, setOpenCreatePost] = useState(false);
+    const { logout } = useAuth();
 
     const handleMenuOpen = (e: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(e.currentTarget);
     const handleMenuClose = () => setAnchorEl(null);
 
     const openShortenerModal = () => { handleMenuClose(); setOpenShortener(true); };
     const openCreatePostModal = () => { handleMenuClose(); setOpenCreatePost(true); };
+
+    const handleLogout = () => {
+        handleMenuClose();
+        logout();
+    };
 
     return (
         <>
@@ -31,7 +38,7 @@ export default function BasicMenu() {
             >
                 <MenuItem onClick={openShortenerModal}>Encurtar Link</MenuItem>
                 <MenuItem onClick={openCreatePostModal}>Criar Post</MenuItem>
-                <MenuItem onClick={() => { handleMenuClose(); localStorage.removeItem('user'); window.location.reload(); }}>Sair</MenuItem>
+                <MenuItem onClick={handleLogout}>Sair</MenuItem>
             </Menu>
 
             <Dialog

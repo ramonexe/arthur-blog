@@ -15,11 +15,27 @@ import ShinyText from '../components/Layout/ShinyText';
 export default function Inicio() {
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
+    
     useEffect(() => {
-        listarPosts()
-            .then(data => setPosts(data))
-            .catch(() => { });
-        setLoading(false);
+        const fetchPosts = async () => {
+            try {
+                const data = await listarPosts();
+                console.log('Dados recebidos:', data);
+                if (Array.isArray(data)) {
+                    setPosts(data);
+                } else {
+                    console.error('Dados recebidos não são um array:', data);
+                    setPosts([]);
+                }
+            } catch (error) {
+                console.error('Erro ao buscar posts:', error);
+                setPosts([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        fetchPosts();
     }, []);
 
     if (loading) return <LoadingContainer><BarLoader color="#00c3ff" /></LoadingContainer>;
@@ -109,9 +125,13 @@ export default function Inicio() {
                 >
                     <h3>OPORTUNIDADES RECENTES</h3>
                     <Grid>
-                        {posts.map(post => (
-                            <PostCard key={post.id} post={post} />
-                        ))}
+                        {Array.isArray(posts) && posts.length > 0 ? (
+                            posts.map(post => (
+                                <PostCard key={post.id} post={post} />
+                            ))
+                        ) : (
+                            <p>Nenhum post encontrado.</p>
+                        )}
                     </Grid>
                 </AnimatedContent>
             </Container>

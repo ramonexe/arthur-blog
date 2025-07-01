@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { login, AuthRequestDTO } from '../api/UserService'
+import { userLogin, AuthRequestDTO } from '../api/UserService'
 import Container from '../components/Layout/ContainerAll'
 import styled from 'styled-components'
 import { Button } from 'dynamix-button'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Login() {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [loading, setLoading] = useState(false)
+    const { login } = useAuth();
     const navigate = useNavigate()
 
     const handleSubmit = async () => {
@@ -21,8 +23,9 @@ export default function Login() {
         try {
             setLoading(true)
             const creds: AuthRequestDTO = { email, senha }
-            const user = await login(creds)
-            localStorage.setItem('user', JSON.stringify(user))
+            const user = await userLogin(creds)
+            console.log('Usuário autenticado:', user)
+            login(user);
             toast.success('Autenticado com sucesso!')
             navigate('/')
         } catch (err: any) {
@@ -69,7 +72,6 @@ export default function Login() {
                     {loading ? 'Entrando...' : 'Entrar'}
                 </Button>
             </Form>
-            <ToastContainer position="top-center" />
         </Container>
     )
 }

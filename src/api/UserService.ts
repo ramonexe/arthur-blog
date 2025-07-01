@@ -13,12 +13,13 @@ export interface AuthRequestDTO {
 }
 
 export interface UsuarioResponseDTO {
-  id: number;
+  id: any;
   name: string;
+  email: string;
   role: string;
 }
 
-export const login = async (
+export const userLogin = async (
   credentials: AuthRequestDTO
 ): Promise<UsuarioResponseDTO> => {
   const response = await api.post<UsuarioResponseDTO>(

@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Inicio from './pages/Inicio'
 import PostDetail from './pages/PostDetail'
-import AdminPanel from './pages/AdminPanel'
-import { Button } from 'dynamix-button'
 import styled from 'styled-components'
-import { Bolt } from 'lucide-react'
 import ClickSpark from './components/Layout/ClickSpark'
 import Curso from './pages/Curso'
 import Login from './pages/Login'
 import BasicMenu from './components/Layout/BasicMenu'
+import { ToastContainer } from 'react-toastify'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 
-export default function App() {
-  const navigate = useNavigate()
-  const [user, setUser] = useState(null)
-  useEffect(() => {
-    const u = localStorage.getItem('user')
-    if (u) setUser(JSON.parse(u))
-  }, [])
+function AppContent() {
+  const { user } = useAuth();
+
   return (
     <ClickSpark
       sparkColor='#fff'
@@ -35,10 +29,18 @@ export default function App() {
       {user && (
         <FixedButton>
           <BasicMenu />
-          {/*<Button backgroundColor="#0084ff" hoverBackgroundColor="#0060b9" activeBackgroundColor="#004381" onClick={() => navigate('/admin')} icon={<Bolt />}>Admin</Button>*/}
         </FixedButton>
       )}
+      <ToastContainer />
     </ClickSpark>
+  )
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }
 
