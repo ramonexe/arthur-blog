@@ -32,7 +32,8 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
 
     try {
       setLoading(true);
-      await criarPost({ titulo, conteudo: editorContent, youtubeUrl });
+      const data_criacao = Date.now();
+      await criarPost({ titulo, conteudo: editorContent, youtubeUrl, data_criacao });
       toast.success('Post criado com sucesso!');
 
       setTitulo('');
@@ -80,14 +81,15 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
                 skin: 'oxide-dark',
                 content_css: 'dark',
                 plugins: [
-                  'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                  'advlist', 'autolink', 'lists', 'link', 'charmap', 'preview',
                   'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                  'insertdatetime', 'media', 'table', 'help', 'wordcount', 'emoticons'
+                  'insertdatetime', 'table', 'help', 'wordcount', 'emoticons'
                 ],
                 toolbar: 'undo redo | blocks | ' +
                   'bold italic forecolor backcolor | alignleft aligncenter ' +
                   'alignright alignjustify | bullist numlist outdent indent | ' +
-                  'removeformat | link image media | code preview | help',
+                  'removeformat | link | code preview | help',
+                link_default_target: '_blank',
                 content_style: `
                                     body { 
                                         font-family: Helvetica, Arial, sans-serif; 

@@ -15,14 +15,19 @@ import ShinyText from '../components/Layout/ShinyText';
 export default function Inicio() {
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
-    
+
     useEffect(() => {
         const fetchPosts = async () => {
             try {
                 const data = await listarPosts();
                 console.log('Dados recebidos:', data);
                 if (Array.isArray(data)) {
-                    setPosts(data);
+                    const sortedPosts = data.sort((a, b) => {
+                        const dateA = new Date(a.data_criacao || a.id).getTime();
+                        const dateB = new Date(b.data_criacao || b.id).getTime();
+                        return dateB - dateA;
+                    });
+                    setPosts(sortedPosts);
                 } else {
                     console.error('Dados recebidos não são um array:', data);
                     setPosts([]);
@@ -34,7 +39,7 @@ export default function Inicio() {
                 setLoading(false);
             }
         };
-        
+
         fetchPosts();
     }, []);
 

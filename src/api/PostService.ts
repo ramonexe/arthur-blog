@@ -8,11 +8,11 @@ const api = axios.create({
 });
 
 export interface Post {
+  data_criacao: number;
   id: number;
   titulo: string;
   conteudo: string;
   youtubeUrl?: string;
-  dataCriacao: string;
 }
 
 export const criarPost = async (

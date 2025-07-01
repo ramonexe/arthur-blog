@@ -26,7 +26,7 @@ export default function Curso() {
                     <ASCIIText
                         text='<AGC/> Class'
                         enableWaves={true}
-                        asciiFontSize={8}
+                        asciiFontSize={7}
                         textFontSize={38}
                         planeBaseHeight={5}
                     />
