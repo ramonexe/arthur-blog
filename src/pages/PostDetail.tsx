@@ -83,7 +83,7 @@ const Content = styled.div`
   line-height: 1.8;
   margin-top: 1rem;
   color: #ffffff;
-  
+
   h1, h2, h3, h4, h5, h6 {
     color: #0084ff !important;
     margin-top: 1.5rem;
@@ -99,6 +99,7 @@ const Content = styled.div`
   h6 { font-size: 0.9rem; }
   
   p {
+    font-weight: 300;
     margin-bottom: 1rem;
     line-height: 1.8;
   }

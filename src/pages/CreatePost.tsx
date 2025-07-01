@@ -7,72 +7,88 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Button } from 'dynamix-button';
 import { Editor } from '@tinymce/tinymce-react';
 
-export default function CreatePost() {
-    const [titulo, setTitulo] = useState('');
-    const [conteudo, setConteudo] = useState('');
-    const [youtubeUrl, setYoutubeUrl] = useState('');
-    const [loading, setLoading] = useState(false);
-    const editorRef = useRef<any>(null);
-    const navigate = useNavigate();
-    const apiKey = import.meta.env.VITE_TINY_API_KEY
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+interface CreatePostProps {
+  onPostCreated?: () => void;
+}
 
-        const editorContent = editorRef.current?.getContent() || '';
-        
-        if (!titulo || !editorContent.trim()) {
-            toast.error('Título e conteúdo são obrigatórios.');
-            return;
-        }
-        
-        try {
-            setLoading(true);
-            await criarPost({ titulo, conteudo: editorContent, youtubeUrl });
-            toast.success('Post criado com sucesso!');
-            navigate('/');
-        } catch (err: any) {
-            console.error(err);
-            toast.error('Erro ao criar post');
-        } finally {
-            setLoading(false);
-        }
-    };
+export default function CreatePost({ onPostCreated }: CreatePostProps) {
+  const [titulo, setTitulo] = useState('');
+  const [conteudo, setConteudo] = useState('');
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [loading, setLoading] = useState(false);
+  const editorRef = useRef<any>(null);
+  const navigate = useNavigate();
+  const apiKey = import.meta.env.VITE_TINY_API_KEY
 
-    return (
-        <Container>
-            <h1>Criar Post</h1>
-            <Form onSubmit={handleSubmit}>
-                <InputGroup>
-                    <Label>Título</Label>
-                    <Input
-                        type="text"
-                        value={titulo}
-                        onChange={e => setTitulo(e.target.value)}
-                        placeholder='Título do post'
-                    />
-                </InputGroup>
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-                <InputGroup>
-                    <Label>Conteúdo</Label>
-                    <EditorContainer>
-                        <Editor
-                            onInit={(_evt, editor) => editorRef.current = editor}
-                            apiKey={apiKey}
-                            init={{
-                                height: 400,
-                                menubar: false,
-                                skin: 'oxide-dark',
-                                content_css: 'dark',
-                                plugins: [
-                                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                                    'insertdatetime', 'media', 'table', 'help', 'wordcount', 'emoticons'
-                                ],
-                                toolbar: 'undo redo | blocks | ' +
-                                    'bold italic forecolor backcolor | alignleft aligncenter ' +
-                                    'alignright alignjustify | bullist numlist outdent indent | ' +
-                                    'removeformat | link image media | code preview | help',
-                                content_style: `
+    const editorContent = editorRef.current?.getContent() || '';
+
+    if (!titulo || !editorContent.trim()) {
+      toast.error('Título e conteúdo são obrigatórios.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await criarPost({ titulo, conteudo: editorContent, youtubeUrl });
+      toast.success('Post criado com sucesso!');
+
+      setTitulo('');
+      setConteudo('');
+      setYoutubeUrl('');
+      if (editorRef.current) {
+        editorRef.current.setContent('');
+      }
+      if (onPostCreated) {
+        onPostCreated();
+      }
+
+      navigate('/');
+    } catch (err: any) {
+      console.error(err);
+      toast.error('Erro ao criar post');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Container>
+      <h1>Criar Post</h1>
+      <Form onSubmit={handleSubmit}>
+        <InputGroup>
+          <Label>Título</Label>
+          <Input
+            type="text"
+            value={titulo}
+            onChange={e => setTitulo(e.target.value)}
+            placeholder='Título do post'
+          />
+        </InputGroup>
+
+        <InputGroup>
+          <Label>Conteúdo</Label>
+          <EditorContainer>
+            <Editor
+              onInit={(_evt, editor) => editorRef.current = editor}
+              apiKey={apiKey}
+              init={{
+                height: 400,
+                menubar: false,
+                skin: 'oxide-dark',
+                content_css: 'dark',
+                plugins: [
+                  'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                  'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                  'insertdatetime', 'media', 'table', 'help', 'wordcount', 'emoticons'
+                ],
+                toolbar: 'undo redo | blocks | ' +
+                  'bold italic forecolor backcolor | alignleft aligncenter ' +
+                  'alignright alignjustify | bullist numlist outdent indent | ' +
+                  'removeformat | link image media | code preview | help',
+                content_style: `
                                     body { 
                                         font-family: Helvetica, Arial, sans-serif; 
                                         font-size: 14px;
@@ -105,44 +121,64 @@ export default function CreatePost() {
                                         overflow-x: auto;
                                     }
                                 `,
-                                setup: (editor: any) => {
-                                    editor.on('change', () => {
-                                        setConteudo(editor.getContent());
-                                    });
-                                }
-                            }}
-                        />
-                    </EditorContainer>
-                </InputGroup>
+                setup: (editor: any) => {
+                  editor.on('change', () => {
+                    setConteudo(editor.getContent());
+                  });
+                }
+              }}
+            />
+          </EditorContainer>
+        </InputGroup>
 
-                <InputGroup>
-                    <Label>URL do YouTube (opcional)</Label>
-                    <Input
-                        type="text"
-                        value={youtubeUrl}
-                        onChange={e => setYoutubeUrl(e.target.value)}
-                        placeholder='https://www.youtube.com/watch?v=...'
-                    />
-                </InputGroup>
+        <InputGroup>
+          <Label>URL do YouTube (opcional)</Label>
+          <Input
+            type="text"
+            value={youtubeUrl}
+            onChange={e => setYoutubeUrl(e.target.value)}
+            placeholder='https://www.youtube.com/watch?v=...'
+          />
+        </InputGroup>
 
-                <Button 
-                    backgroundColor="#0084ff" 
-                    hoverBackgroundColor="#0060b9" 
-                    activeBackgroundColor="#004381" 
-                    onClick={() => {
-                        const event = { preventDefault: () => {} } as React.FormEvent;
-                        handleSubmit(event);
-                    }} 
-                    disabled={loading}
-                    fullWidth
-                >
-                    {loading ? 'Enviando...' : 'Publicar'}
-                </Button>
-            </Form>
-            <ToastContainer />
-        </Container>
-    );
+        <ButtonsContainer>
+          <Button
+            backgroundColor="#0084ff"
+            hoverBackgroundColor="#0060b9"
+            activeBackgroundColor="#004381"
+            onClick={() => {
+              const event = { preventDefault: () => { } } as React.FormEvent;
+              handleSubmit(event);
+            }}
+            disabled={loading}
+            fullWidth
+          >
+            {loading ? 'Enviando...' : 'Publicar'}
+          </Button>
+
+          {onPostCreated && (
+            <Button
+              backgroundColor="#666666"
+              hoverBackgroundColor="#555555"
+              activeBackgroundColor="#444444"
+              onClick={onPostCreated}
+              fullWidth
+            >
+              Cancelar
+            </Button>
+          )}
+        </ButtonsContainer>
+      </Form>
+      <ToastContainer />
+    </Container>
+  );
 }
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
 
 const Container = styled.div`
   padding: 1rem;

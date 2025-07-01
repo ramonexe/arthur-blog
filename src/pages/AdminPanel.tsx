@@ -9,20 +9,26 @@ import { Plus } from "lucide-react";
 import { useDebounce } from '../hooks/useDebounce';
 import { useNavigate } from "react-router-dom";
 
-export default function AdminPanel() {
+interface AdminPanelProps {
+    onLinkCreated?: () => void; // Função opcional para fechar modal
+}
+
+export default function AdminPanel({ onLinkCreated }: AdminPanelProps) {
     const navigate = useNavigate();
-    // redireciona se não estiver logado
+    
+    // redireciona se não estiver logado (apenas quando não está no modal)
     useEffect(() => {
-        if (!localStorage.getItem('user')) {
+        if (!onLinkCreated && !sessionStorage.getItem('user')) {
             navigate('/adm');
         }
-    }, []);
+    }, [onLinkCreated, navigate]);
+
     const [url, setUrl] = useState("");
     const [titulo, setTitulo] = useState("");
     const [search, setSearch] = useState("");
     const [codigo, setCodigo] = useState("");
     const [links, setLinks] = useState<Link[]>([]);
-    const debouncedSearch = useDebounce(search, 500)
+    const debouncedSearch = useDebounce(search, 500);
 
     const fetchLinks = async () => {
         try {
@@ -34,8 +40,8 @@ export default function AdminPanel() {
     };
 
     useEffect(() => {
-        fetchLinks()
-    }, [debouncedSearch])
+        fetchLinks();
+    }, [debouncedSearch]);
 
     const handleSubmit = async () => {
         if (!url || !codigo) {
@@ -46,10 +52,19 @@ export default function AdminPanel() {
             await encurtarLink(url, codigo, titulo);
             console.log(url, codigo, titulo);
             toast.success("Link encurtado!");
+            
+            // Resetar formulário
             setUrl("");
             setTitulo("");
             setCodigo("");
             fetchLinks();
+            
+            // Se está sendo usado no modal, fechar modal
+            if (onLinkCreated) {
+                setTimeout(() => {
+                    onLinkCreated();
+                }, 1000);
+            }
         } catch {
             toast.error("Erro ao encurtar.");
         }
@@ -74,6 +89,8 @@ export default function AdminPanel() {
     return (
         <ContainerEncurtador>
             <div style={{ margin: "0 auto", textAlign: "center" }}>
+                <Title>Encurtador de Links</Title>
+                
                 <div style={{ marginBottom: "1rem", margin: "0 auto" }}>
                     <Searchinput
                         value={search}
@@ -81,6 +98,7 @@ export default function AdminPanel() {
                         placeholder="Buscar por URL, código ou título"
                     />
                 </div>
+                
                 <InputsContainer>
                     <Input
                         value={url}
@@ -96,21 +114,66 @@ export default function AdminPanel() {
                     <Input
                         value={codigo}
                         onChange={e => setCodigo(e.target.value)}
-                        placeholder="Codigo"
+                        placeholder="Código"
                         required
                     />
-                    <Button backgroundColor="#0084ff" hoverBackgroundColor="#0060b9" activeBackgroundColor="#004381" alwaysShowText fullWidth icon={<Plus />} onClick={handleSubmit} disabled={!url || !codigo}>Encurtar</Button>
                 </InputsContainer>
 
-                {filteredLinks.map(link => (
-                    <LinkCard key={link.codigo} link={link} onDelete={handleDelete} />
-                ))}
+                <ButtonsContainer>
+                    <Button 
+                        backgroundColor="#0084ff" 
+                        hoverBackgroundColor="#0060b9" 
+                        activeBackgroundColor="#004381" 
+                        alwaysShowText 
+                        fullWidth 
+                        icon={<Plus />} 
+                        onClick={handleSubmit} 
+                        disabled={!url || !codigo}
+                    >
+                        Encurtar
+                    </Button>
+                    
+                    {onLinkCreated && (
+                        <Button 
+                            backgroundColor="#666666" 
+                            hoverBackgroundColor="#555555" 
+                            activeBackgroundColor="#444444" 
+                            onClick={onLinkCreated}
+                            fullWidth
+                        >
+                            Cancelar
+                        </Button>
+                    )}
+                </ButtonsContainer>
+
+                <LinksContainer>
+                    {filteredLinks.map(link => (
+                        <LinkCard key={link.codigo} link={link} onDelete={handleDelete} />
+                    ))}
+                </LinksContainer>
 
                 <ToastContainer />
             </div>
         </ContainerEncurtador>
     );
 }
+
+const Title = styled.h1`
+    margin-bottom: 1rem;
+    color: #0084ff;
+    font-size: 1.5rem;
+`;
+
+const ButtonsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+`;
+
+const LinksContainer = styled.div`
+    margin-top: 1rem;
+`;
 
 const InputsContainer = styled.div`
     display: flex;
@@ -122,7 +185,7 @@ const InputsContainer = styled.div`
     @media (max-width: 768px) {
         flex-direction: column;
     }
-`
+`;
 
 const ContainerEncurtador = styled.div`
   padding: 1rem;
@@ -131,39 +194,55 @@ const ContainerEncurtador = styled.div`
   color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 0 12px rgba(44, 150, 238, 0.5);
-  
-  h1 {
-    margin-bottom: 1rem;
-  }
+  max-width: 800px;
+  width: 90vw;
   
   @media (max-width: 768px) {
     padding: 1rem;
-    h1 {
-      font-size: 1.5rem;
-    }
+    width: 95vw;
   }
 `;
 
 const Input = styled.input`
   border: 1px solid #0084ff;
-  background:rgb(7, 8, 12);
+  background: rgb(7, 8, 12);
   color: #ffffff;
   border-radius: 4px;
   font-size: 1rem;
   height: 3rem;
   padding: 0 0.5rem;
   box-shadow: 0 0 8px rgba(20, 24, 37, 0.1);
+  
+  &:focus {
+    outline: none;
+    border-color: #00a6ff;
+    box-shadow: 0 0 0 2px rgba(0, 132, 255, 0.2);
+  }
+
+  &::placeholder {
+    color: #888;
+  }
 `;
 
 const Searchinput = styled.input`
   border: 1px solid #0084ff73;
-  background:rgb(7, 8, 12);
+  background: rgb(7, 8, 12);
   color: #ffffff;
   border-radius: 50px;
   font-size: 1rem;
   height: 2.5rem;
   width: 100%;
-  padding: 0 0.5rem;
+  padding: 0 1rem;
   margin-bottom: 1rem;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  
+  &:focus {
+    outline: none;
+    border-color: #0084ff;
+    box-shadow: 0 0 0 2px rgba(0, 132, 255, 0.2);
+  }
+
+  &::placeholder {
+    color: #888;
+  }
 `;

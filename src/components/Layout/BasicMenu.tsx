@@ -25,6 +25,14 @@ export default function BasicMenu() {
         logout();
     };
 
+    const closeCreatePostModal = () => {
+        setOpenCreatePost(false);
+    };
+
+    const closeShortenerModal = () => {
+        setOpenShortener(false);
+    };
+
     return (
         <>
             <Button onClick={handleMenuOpen} variant="contained" color="primary" id="basic-button">
@@ -43,7 +51,7 @@ export default function BasicMenu() {
 
             <Dialog
                 open={openShortener}
-                onClose={() => setOpenShortener(false)}
+                onClose={closeShortenerModal}
                 fullWidth={false}
                 maxWidth={false}
                 PaperProps={{
@@ -53,12 +61,12 @@ export default function BasicMenu() {
                     }
                 }}
             >
-                <AdminPanel />
+                <AdminPanel onLinkCreated={closeShortenerModal}/>
             </Dialog>
 
             <Dialog
                 open={openCreatePost}
-                onClose={() => setOpenCreatePost(false)}
+                onClose={closeCreatePostModal}
                 fullWidth={false}
                 maxWidth={false}
                 PaperProps={{
@@ -68,7 +76,7 @@ export default function BasicMenu() {
                     }
                 }}
             >
-                <CreatePost />
+                <CreatePost onPostCreated={closeCreatePostModal}/>
             </Dialog>
         </>
     );
