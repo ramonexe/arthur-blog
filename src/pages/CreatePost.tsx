@@ -13,7 +13,6 @@ interface CreatePostProps {
 
 export default function CreatePost({ onPostCreated }: CreatePostProps) {
   const [titulo, setTitulo] = useState('');
-  const [conteudo, setConteudo] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const editorRef = useRef<any>(null);
@@ -37,7 +36,6 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
       toast.success('Post criado com sucesso!');
 
       setTitulo('');
-      setConteudo('');
       setYoutubeUrl('');
       if (editorRef.current) {
         editorRef.current.setContent('');
@@ -122,12 +120,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
                                         border-radius: 4px;
                                         overflow-x: auto;
                                     }
-                                `,
-                setup: (editor: any) => {
-                  editor.on('change', () => {
-                    setConteudo(editor.getContent());
-                  });
-                }
+                                `
               }}
             />
           </EditorContainer>
