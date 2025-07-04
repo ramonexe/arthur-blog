@@ -15,7 +15,7 @@ interface AdminPanelProps {
 
 export default function AdminPanel({ onLinkCreated }: AdminPanelProps) {
     const navigate = useNavigate();
-    
+
     // redireciona se não estiver logado (apenas quando não está no modal)
     useEffect(() => {
         if (!onLinkCreated && !sessionStorage.getItem('user')) {
@@ -52,13 +52,13 @@ export default function AdminPanel({ onLinkCreated }: AdminPanelProps) {
             await encurtarLink(url, codigo, titulo);
             console.log(url, codigo, titulo);
             toast.success("Link encurtado!");
-            
+
             // Resetar formulário
             setUrl("");
             setTitulo("");
             setCodigo("");
             fetchLinks();
-            
+
             // Se está sendo usado no modal, fechar modal
             if (onLinkCreated) {
                 setTimeout(() => {
@@ -89,8 +89,8 @@ export default function AdminPanel({ onLinkCreated }: AdminPanelProps) {
     return (
         <ContainerEncurtador>
             <div style={{ margin: "0 auto", textAlign: "center" }}>
-                <Title>Encurtador de Links</Title>
-                
+                <Title>Encurtar Link</Title>
+
                 <div style={{ marginBottom: "1rem", margin: "0 auto" }}>
                     <Searchinput
                         value={search}
@@ -98,7 +98,7 @@ export default function AdminPanel({ onLinkCreated }: AdminPanelProps) {
                         placeholder="Buscar por URL, código ou título"
                     />
                 </div>
-                
+
                 <InputsContainer>
                     <Input
                         value={url}
@@ -120,24 +120,24 @@ export default function AdminPanel({ onLinkCreated }: AdminPanelProps) {
                 </InputsContainer>
 
                 <ButtonsContainer>
-                    <Button 
-                        backgroundColor="#0084ff" 
-                        hoverBackgroundColor="#0060b9" 
-                        activeBackgroundColor="#004381" 
-                        alwaysShowText 
-                        fullWidth 
-                        icon={<Plus />} 
-                        onClick={handleSubmit} 
+                    <Button
+                        backgroundColor="#0084ff"
+                        hoverBackgroundColor="#0060b9"
+                        activeBackgroundColor="#004381"
+                        alwaysShowText
+                        fullWidth
+                        icon={<Plus />}
+                        onClick={handleSubmit}
                         disabled={!url || !codigo}
                     >
                         Encurtar
                     </Button>
-                    
+
                     {onLinkCreated && (
-                        <Button 
-                            backgroundColor="#666666" 
-                            hoverBackgroundColor="#555555" 
-                            activeBackgroundColor="#444444" 
+                        <Button
+                            backgroundColor="#666666"
+                            hoverBackgroundColor="#555555"
+                            activeBackgroundColor="#444444"
                             onClick={onLinkCreated}
                             fullWidth
                         >
@@ -190,6 +190,7 @@ const InputsContainer = styled.div`
 const ContainerEncurtador = styled.div`
   padding: 1rem;
   margin: 10px;
+  overflow: hidden;
   background: rgb(7, 8, 12);
   color: #ffffff;
   border-radius: 8px;
@@ -199,8 +200,13 @@ const ContainerEncurtador = styled.div`
   
   @media (max-width: 768px) {
     padding: 1rem;
-    width: 95vw;
+    width: 85vw;
   }
+
+    @media (max-width: 480px) {
+    padding: 1rem;
+    width: 80vw;
+    }
 `;
 
 const Input = styled.input`

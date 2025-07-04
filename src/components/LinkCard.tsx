@@ -16,11 +16,11 @@ export default function LinkCard({ link, onDelete }: Props) {
       <div style={{ marginTop: "0.5rem", fontSize: "0.9rem" }}>
         <strong>Link Encurtado:</strong>
         <ShortUrl
-          href={`http://localhost:8080/${link.codigo}`}
+          href={`https://arthurgarcia.link/${link.codigo}`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          http://localhost:8080/{link.codigo}
+          https://arthurgarcia.link/{link.codigo}
         </ShortUrl>
       </div>
       <p style={{ fontSize: "0.8rem", color: "#666" }}>

@@ -87,6 +87,7 @@ export default function Inicio() {
                         borderColor='#e93630b2'
                         hoverBackgroundColor="#1d2125"
                         activeBackgroundColor="#8f2310"
+                        onClick={() => window.open('https://www.youtube.com/@arthurgarciacrypto', '_blank')}
                     >
                         <ShinyText text="YOUTUBE" disabled={false} speed={3} className='custom-class' />
                     </Button>
@@ -112,6 +113,7 @@ export default function Inicio() {
                         borderColor='#128c7ebc'
                         hoverBackgroundColor="#1d2125"
                         activeBackgroundColor="#075E54"
+                        onClick={() => window.open('https://chat.whatsapp.com/BXgit8Sg7xQ6KMgIhZ0rSX', '_blank')}
                     >
                         <ShinyText text="WHATSAPP" disabled={false} speed={3} className='custom-class' />
                     </Button>
@@ -167,7 +169,7 @@ const LoadingContainer = styled.div`
 const Banner = styled.div`
     background: #08080883;
     display: flex;
-    height: 85vh;
+    height: 70vh;
     align-items: center;
     justify-content: center;
     flex-direction: column;

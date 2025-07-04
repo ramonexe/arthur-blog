@@ -26,11 +26,9 @@ function AppContent() {
         <Route path="/adm" element={<Login />} />
         <Route path="/posts/:id" element={<PostDetail />} />
       </Routes>
-      {user && (
         <FixedButton>
           <BasicMenu />
         </FixedButton>
-      )}
       <ToastContainer />
     </ClickSpark>
   )

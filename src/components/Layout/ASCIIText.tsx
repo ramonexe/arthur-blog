@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 const vertexShader = `
@@ -116,16 +116,28 @@ class AsciiFilter {
 
     reset() {
         if (this.context) {
-            this.context.font = `${this.fontSize}px ${this.fontFamily}`;
+            // Calcular valores responsivos
+            const screenWidth = window.innerWidth;
+            let adjustedFontSize = this.fontSize;
+            
+            if (screenWidth <= 480) {
+                adjustedFontSize = Math.max(2, this.fontSize * 0.4);
+            } else if (screenWidth <= 768) {
+                adjustedFontSize = Math.max(3, this.fontSize * 0.6);
+            } else if (screenWidth <= 1024) {
+                adjustedFontSize = Math.max(4, this.fontSize * 0.8);
+            }
+
+            this.context.font = `${adjustedFontSize}px ${this.fontFamily}`;
             const charWidth = this.context.measureText('A').width;
 
-            this.cols = Math.floor(this.width / (this.fontSize * (charWidth / this.fontSize)));
-            this.rows = Math.floor(this.height / this.fontSize);
+            this.cols = Math.floor(this.width / (adjustedFontSize * (charWidth / adjustedFontSize)));
+            this.rows = Math.floor(this.height / adjustedFontSize);
 
             this.canvas.width = this.cols;
             this.canvas.height = this.rows;
             this.pre.style.fontFamily = this.fontFamily;
-            this.pre.style.fontSize = `${this.fontSize}px`;
+            this.pre.style.fontSize = `${adjustedFontSize}px`;
             this.pre.style.margin = '0';
             this.pre.style.padding = '0';
             this.pre.style.lineHeight = '1em';
@@ -294,6 +306,7 @@ class CanvAscii {
     filter!: AsciiFilter;
     center: { x: number; y: number } = { x: 0, y: 0 };
     animationFrameId: number = 0;
+    isDisposed: boolean = false;
 
     constructor(
         { text, asciiFontSize, textFontSize, textColor, planeBaseHeight, enableWaves }: CanvAsciiOptions,
@@ -388,10 +401,14 @@ class CanvAscii {
     }
 
     load() {
-        this.animate();
+        if (!this.isDisposed) {
+            this.animate();
+        }
     }
 
     onMouseMove(evt: MouseEvent | TouchEvent) {
+        if (this.isDisposed) return;
+        
         const e = (evt as TouchEvent).touches ? (evt as TouchEvent).touches[0] : (evt as MouseEvent);
         const bounds = this.container.getBoundingClientRect();
         const x = e.clientX - bounds.left;
@@ -401,6 +418,8 @@ class CanvAscii {
 
     animate() {
         const animateFrame = () => {
+            if (this.isDisposed) return;
+            
             this.animationFrameId = requestAnimationFrame(animateFrame);
             this.render();
         };
@@ -408,6 +427,8 @@ class CanvAscii {
     }
 
     render() {
+        if (this.isDisposed) return;
+        
         const time = new Date().getTime() * 0.001;
 
         this.textCanvas.render();
@@ -420,6 +441,8 @@ class CanvAscii {
     }
 
     updateRotation() {
+        if (this.isDisposed) return;
+        
         const x = map(this.mouse.y, 0, this.height, 0.5, -0.5);
         const y = map(this.mouse.x, 0, this.width, -0.5, 0.5);
 
@@ -428,10 +451,12 @@ class CanvAscii {
     }
 
     clear() {
+        if (this.isDisposed) return;
+        
         this.scene.traverse((object) => {
             const obj = object as unknown as THREE.Mesh
             if (!obj.isMesh) return;
-              [obj.material].flat().forEach((material) => {
+            [obj.material].flat().forEach((material) => {
                 material.dispose();
                 Object.keys(material).forEach((key) => {
                     const matProp = material[key as keyof typeof material];
@@ -446,13 +471,40 @@ class CanvAscii {
     }
 
     dispose() {
-        cancelAnimationFrame(this.animationFrameId);
-        this.filter.dispose();
-        this.container.removeChild(this.filter.domElement);
+        if (this.isDisposed) return;
+        
+        this.isDisposed = true;
+        
+        // Cancelar animação
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
+        }
+        
+        // Remover event listeners
         this.container.removeEventListener('mousemove', this.onMouseMove);
         this.container.removeEventListener('touchmove', this.onMouseMove);
+        
+        // Limpar recursos Three.js
         this.clear();
-        this.renderer.dispose();
+        
+        // Dispose do renderer
+        if (this.renderer) {
+            this.renderer.dispose();
+        }
+        
+        // Dispose do filter
+        if (this.filter) {
+            this.filter.dispose();
+        }
+        
+        // Remover domElement apenas se ele existir e for filho do container
+        if (this.filter && this.filter.domElement && this.container.contains(this.filter.domElement)) {
+            try {
+                this.container.removeChild(this.filter.domElement);
+            } catch (error) {
+                console.warn('Erro ao remover elemento DOM:', error);
+            }
+        }
     }
 }
 
@@ -475,32 +527,110 @@ export default function ASCIIText({
 }: ASCIITextProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const asciiRef = useRef<CanvAscii | null>(null);
+    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+    // Função para calcular valores responsivos
+    const getResponsiveValues = (width: number) => {
+        if (width <= 480) { // Mobile
+            return {
+                asciiFontSize: Math.max(2, asciiFontSize * 0.4),
+                textFontSize: Math.max(9, textFontSize * 0.5),
+                planeBaseHeight: Math.max(3, planeBaseHeight * 0.6)
+            };
+        } else if (width <= 768) { // Tablet
+            return {
+                asciiFontSize: Math.max(3, asciiFontSize * 0.6),
+                textFontSize: Math.max(16, textFontSize * 0.7),
+                planeBaseHeight: Math.max(4, planeBaseHeight * 0.7)
+            };
+        } else if (width <= 1024) { // Desktop small
+            return {
+                asciiFontSize: Math.max(4, asciiFontSize * 0.8),
+                textFontSize: Math.max(24, textFontSize * 0.85),
+                planeBaseHeight: Math.max(6, planeBaseHeight * 0.8)
+            };
+        } else { // Desktop large
+            return {
+                asciiFontSize,
+                textFontSize,
+                planeBaseHeight
+            };
+        }
+    };
 
     useEffect(() => {
         if (!containerRef.current) return;
 
-        const { width, height } = containerRef.current.getBoundingClientRect();
+        const updateDimensions = () => {
+            if (!containerRef.current) return;
+            const { width, height } = containerRef.current.getBoundingClientRect();
+            setDimensions({ width, height });
+        };
 
-        asciiRef.current = new CanvAscii(
-            { text, asciiFontSize, textFontSize, textColor, planeBaseHeight, enableWaves },
-            containerRef.current,
-            width,
-            height
-        );
-        asciiRef.current.load();
+        // Inicializar dimensões
+        updateDimensions();
 
+        // Configurar ResizeObserver
         const ro = new ResizeObserver((entries) => {
             if (!entries[0]) return;
             const { width: w, height: h } = entries[0].contentRect;
-            asciiRef.current?.setSize(w, h);
+            setDimensions({ width: w, height: h });
         });
         ro.observe(containerRef.current);
 
+        // Configurar listener para mudanças de orientação
+        const handleOrientationChange = () => {
+            setTimeout(updateDimensions, 100);
+        };
+        window.addEventListener('orientationchange', handleOrientationChange);
+        window.addEventListener('resize', updateDimensions);
+
         return () => {
             ro.disconnect();
-            asciiRef.current?.dispose();
+            window.removeEventListener('orientationchange', handleOrientationChange);
+            window.removeEventListener('resize', updateDimensions);
         };
-    }, [text, asciiFontSize, textFontSize, textColor, planeBaseHeight, enableWaves]);
+    }, []);
+
+    useEffect(() => {
+        if (!containerRef.current || dimensions.width === 0 || dimensions.height === 0) return;
+
+        // Limpar instância anterior
+        if (asciiRef.current) {
+            asciiRef.current.dispose();
+            asciiRef.current = null;
+        }
+
+        // Calcular valores responsivos
+        const responsiveValues = getResponsiveValues(dimensions.width);
+
+        // Criar nova instância com valores responsivos
+        try {
+            asciiRef.current = new CanvAscii(
+                {
+                    text,
+                    asciiFontSize: responsiveValues.asciiFontSize,
+                    textFontSize: responsiveValues.textFontSize,
+                    textColor,
+                    planeBaseHeight: responsiveValues.planeBaseHeight,
+                    enableWaves
+                },
+                containerRef.current,
+                dimensions.width,
+                dimensions.height
+            );
+            asciiRef.current.load();
+        } catch (error) {
+            console.error('Erro ao criar instância ASCIIText:', error);
+        }
+
+        return () => {
+            if (asciiRef.current) {
+                asciiRef.current.dispose();
+                asciiRef.current = null;
+            }
+        };
+    }, [text, textColor, enableWaves, dimensions.width, dimensions.height]);
 
     return (
         <div
@@ -512,45 +642,65 @@ export default function ASCIIText({
             }}
         >
             <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap');
 
-        body {
-          margin: 0;
-          padding: 0;
-        }
+                body {
+                    margin: 0;
+                    padding: 0;
+                }
 
-        canvas {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          image-rendering: optimizeSpeed;
-          image-rendering: -moz-crisp-edges;
-          image-rendering: -o-crisp-edges;
-          image-rendering: -webkit-optimize-contrast;
-          image-rendering: optimize-contrast;
-          image-rendering: crisp-edges;
-          image-rendering: pixelated;
-        }
+                canvas {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    image-rendering: optimizeSpeed;
+                    image-rendering: -moz-crisp-edges;
+                    image-rendering: -o-crisp-edges;
+                    image-rendering: -webkit-optimize-contrast;
+                    image-rendering: optimize-contrast;
+                    image-rendering: crisp-edges;
+                    image-rendering: pixelated;
+                }
 
-        pre {
-          margin: 0;
-          user-select: none;
-          padding: 0;
-          line-height: 1em;
-          text-align: left;
-          position: absolute;
-          left: 0;
-          top: 0;
-          background-image: radial-gradient(circle, #ff6188 0%, #fc9867 50%, #ffd866 100%);
-          background-attachment: fixed;
-          -webkit-text-fill-color: transparent;
-          -webkit-background-clip: text;
-          z-index: 9;
-          mix-blend-mode: difference;
-        }
-      `}</style>
+                pre {
+                    margin: 0;
+                    user-select: none;
+                    overflow: hidden;
+                    padding: 0;
+                    line-height: 1em;
+                    text-align: left;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    background-image: radial-gradient(circle, #ff6188 0%, #fc9867 50%, #ffd866 100%);
+                    background-attachment: fixed;
+                    -webkit-text-fill-color: transparent;
+                    -webkit-background-clip: text;
+                    z-index: 9;
+                    mix-blend-mode: difference;
+                }
+
+                /* Responsividade para o pre */
+                @media (max-width: 480px) {
+                    pre {
+                        font-size: 2px !important;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    pre {
+                        font-size: 3px !important;
+                    }
+                }
+
+                @media (max-width: 1024px) {
+                    pre {
+                        font-size: 4px !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 }
