@@ -3,11 +3,12 @@ import Inicio from './pages/Inicio'
 import PostDetail from './pages/PostDetail'
 import styled from 'styled-components'
 import ClickSpark from './components/Layout/ClickSpark'
-import Curso from './pages/Curso'
 import Login from './pages/Login'
 import BasicMenu from './components/Layout/BasicMenu'
 import { ToastContainer } from 'react-toastify'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import CursoPage from './pages/CursoPage'
+import { Header } from './components/Header'
 
 function AppContent() {
   const { user } = useAuth();
@@ -20,9 +21,10 @@ function AppContent() {
       sparkCount={8}
       duration={400}
     >
+      <Header />
       <Routes>
         <Route path="/" element={<Inicio />} />
-        <Route path="/curso" element={<Curso />} />
+        <Route path="/curso" element={<CursoPage />} />
         <Route path="/adm" element={<Login />} />
         <Route path="/posts/:id" element={<PostDetail />} />
       </Routes>

@@ -1,0 +1,75 @@
+.focus-container-logo {
+  position: relative;
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.focus-word-logo {
+  position: relative;
+  font-size: 1vw;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    filter 0.3s ease,
+    color 0.3s ease;
+}
+
+@media (max-width: 600px) {
+  .focus-word-logo {
+    font-size: 5vw;
+  }
+}
+
+.focus-word-logo.active {
+  filter: blur(0);
+}
+
+.focus-frame-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  box-sizing: content-box;
+  border: none;
+}
+
+.corner-logo {
+  position: absolute;
+  width: 0.7rem;
+  height: 0.7rem;
+  border: 2px solid var(--border-color, #fff);
+  filter: drop-shadow(0px 0px 2px var(--border-color, #fff));
+  border-radius: 3px;
+  transition: none;
+}
+
+.top-left-logo {
+  top: -10px;
+  left: -10px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.top-right-logo {
+  top: -10px;
+  right: -10px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.bottom-left-logo {
+  bottom: -10px;
+  left: -10px;
+  border-right: none;
+  border-top: none;
+}
+
+.bottom-right-logo {
+  bottom: -10px;
+  right: -10px;
+  border-left: none;
+  border-top: none;
+}

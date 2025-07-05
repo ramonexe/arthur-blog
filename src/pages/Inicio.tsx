@@ -9,12 +9,17 @@ import { Button } from 'dynamix-button';
 import { BookOpenText, MessageCircleMore, Youtube } from 'lucide-react';
 import { BarLoader } from 'react-spinners';
 import { Helmet } from 'react-helmet'
-import AnimatedContent from '../components/Layout/AnimatedContent';
 import ShinyText from '../components/Layout/ShinyText';
+import { useNavigate } from 'react-router-dom';
 
 export default function Inicio() {
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
+    const navigate = useNavigate();
+
+    const handleCursoClick = () => {
+        navigate('/curso');
+    };
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -100,7 +105,7 @@ export default function Inicio() {
                         borderColor='#00c3ffb3'
                         hoverBackgroundColor="#1d2125"
                         activeBackgroundColor="#123788"
-                        onClick={() => window.open('/curso', '_blank')}
+                        onClick={handleCursoClick}
                     >
                         <ShinyText text="CURSO" disabled={false} speed={3} className='custom-class' />
                     </Button>
@@ -118,29 +123,16 @@ export default function Inicio() {
                         <ShinyText text="WHATSAPP" disabled={false} speed={3} className='custom-class' />
                     </Button>
                 </ButtonsWrapper>
-                <AnimatedContent
-                    distance={150}
-                    direction="vertical"
-                    reverse={false}
-                    duration={0.5}
-                    ease="power3.out"
-                    initialOpacity={0}
-                    animateOpacity
-                    scale={1.1}
-                    threshold={0.2}
-                    delay={0.1}
-                >
-                    <h3>OPORTUNIDADES RECENTES</h3>
-                    <Grid>
-                        {Array.isArray(posts) && posts.length > 0 ? (
-                            posts.map(post => (
-                                <PostCard key={post.id} post={post} />
-                            ))
-                        ) : (
-                            <p>Nenhum post encontrado.</p>
-                        )}
-                    </Grid>
-                </AnimatedContent>
+                <h3>OPORTUNIDADES RECENTES</h3>
+                <Grid>
+                    {Array.isArray(posts) && posts.length > 0 ? (
+                        posts.map(post => (
+                            <PostCard key={post.id} post={post} />
+                        ))
+                    ) : (
+                        <p>Nenhum post encontrado.</p>
+                    )}
+                </Grid>
             </Container>
         </>
     );
