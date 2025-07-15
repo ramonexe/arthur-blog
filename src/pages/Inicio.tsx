@@ -43,7 +43,7 @@ export default function Inicio() {
     return (
         <>
             <Helmet>
-                <title>Início - ARTHUR GARCIA CRYPTO</title>
+                <title>Arthur Garcia Crypto - Blog sobre Crypto e NFTs</title>
                 <meta name="description" content="Fique por dentro da atualidade no mundo de Crypto e NFTs" />
                 <meta property="og:title" content="Crypto & NFTs - ARTHUR GARCIA CRYPTO" />
                 <meta property="og:description" content="Fique por dentro da atualidade no mundo de Crypto e NFTs" />
