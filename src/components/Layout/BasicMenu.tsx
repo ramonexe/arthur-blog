@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Dialog from '@mui/material/Dialog';
 import { Bolt } from 'lucide-react';
-import CreatePost from '../../pages/CreatePost';
-import AdminPanel from '../../pages/AdminPanel';
+import CriarPost from '../../pages/CriarPost';
+import EncurtarLink from '../../pages/EncurtarLink';
 import { useAuth } from '../../contexts/AuthContext';
 import styled from 'styled-components';
 
@@ -12,6 +12,7 @@ export default function BasicMenu() {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [openShortener, setOpenShortener] = useState(false);
     const [openCreatePost, setOpenCreatePost] = useState(false);
+    const [isScrollTopVisible, setIsScrollTopVisible] = useState(false);
     const { logout } = useAuth();
 
     const handleMenuOpen = (e: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(e.currentTarget);
@@ -33,9 +34,22 @@ export default function BasicMenu() {
         setOpenShortener(false);
     };
 
+    useEffect(() => {
+        const toggleVisibility = () => {
+            if (window.pageYOffset > 300) {
+                setIsScrollTopVisible(true);
+            } else {
+                setIsScrollTopVisible(false);
+            }
+        };
+
+        window.addEventListener("scroll", toggleVisibility);
+        return () => window.removeEventListener("scroll", toggleVisibility);
+    }, []);
+
     return (
         <>
-            <Button onClick={handleMenuOpen} color="primary" id="basic-button">
+            <Button onClick={handleMenuOpen} color="primary" id="basic-button" $isScrollTopVisible={isScrollTopVisible}>
                 <Bolt />
             </Button>
             <Menu
@@ -62,7 +76,7 @@ export default function BasicMenu() {
                     }
                 }}
             >
-                <AdminPanel onLinkCreated={closeShortenerModal} />
+                <EncurtarLink onLinkCreated={closeShortenerModal} />
             </Dialog>
 
             <Dialog
@@ -78,15 +92,15 @@ export default function BasicMenu() {
                     }
                 }}
             >
-                <CreatePost onPostCreated={closeCreatePostModal} />
+                <CriarPost onPostCreated={closeCreatePostModal} />
             </Dialog>
         </>
     );
 }
 
-const Button = styled.button`
+const Button = styled.button<{ $isScrollTopVisible: boolean }>`
   position: fixed;
-  bottom: 6rem;
+  bottom: ${(props) => (props.$isScrollTopVisible ? '6rem' : '2rem')};
   right: 2rem;
   width: 3rem;
   height: 3rem;

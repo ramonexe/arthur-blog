@@ -7,11 +7,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Button } from 'dynamix-button';
 import { Editor } from '@tinymce/tinymce-react';
 
-interface CreatePostProps {
+interface CriarPostProps {
   onPostCreated?: () => void;
 }
 
-export default function CreatePost({ onPostCreated }: CreatePostProps) {
+export default function CriarPost({ onPostCreated }: CriarPostProps) {
   const [titulo, setTitulo] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [loading, setLoading] = useState(false);

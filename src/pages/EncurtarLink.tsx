@@ -9,11 +9,11 @@ import { Plus } from "lucide-react";
 import { useDebounce } from '../hooks/useDebounce';
 import { useNavigate } from "react-router-dom";
 
-interface AdminPanelProps {
+interface EncurtarLinkProps {
     onLinkCreated?: () => void; // Função opcional para fechar modal
 }
 
-export default function AdminPanel({ onLinkCreated }: AdminPanelProps) {
+export default function EncurtarLink({ onLinkCreated }: EncurtarLinkProps) {
     const navigate = useNavigate();
 
     // redireciona se não estiver logado (apenas quando não está no modal)
@@ -58,13 +58,11 @@ export default function AdminPanel({ onLinkCreated }: AdminPanelProps) {
             console.log(url, codigo, titulo);
             toast.success("Link encurtado!");
 
-            // Resetar formulário
             setUrl("");
             setTitulo("");
             setCodigo("");
             fetchLinks();
 
-            // Se está sendo usado no modal, fechar modal
             if (onLinkCreated) {
                 setTimeout(() => {
                     onLinkCreated();
