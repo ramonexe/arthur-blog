@@ -57,6 +57,6 @@ export default function App() {
 const FixedButton = styled.div`
   position: fixed;
   bottom: 5.5rem;
-  right: 1.5rem;
+  right: 1.75rem;
   z-index: 1000;
 `

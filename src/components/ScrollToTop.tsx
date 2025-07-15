@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { ArrowUp } from "lucide-react"
+import { useLocation } from "react-router-dom"
 
 const ScrollButton = styled.button<{ $isVisible: boolean }>`
   position: fixed;
@@ -28,6 +29,14 @@ const ScrollButton = styled.button<{ $isVisible: boolean }>`
 
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false)
+  const location = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
+  }, [location.pathname])
 
   useEffect(() => {
     const toggleVisibility = () => {

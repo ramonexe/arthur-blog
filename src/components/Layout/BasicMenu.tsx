@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Dialog from '@mui/material/Dialog';
@@ -7,6 +6,7 @@ import { Bolt } from 'lucide-react';
 import CreatePost from '../../pages/CreatePost';
 import AdminPanel from '../../pages/AdminPanel';
 import { useAuth } from '../../contexts/AuthContext';
+import styled from 'styled-components';
 
 export default function BasicMenu() {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -35,7 +35,7 @@ export default function BasicMenu() {
 
     return (
         <>
-            <Button onClick={handleMenuOpen} variant="contained" color="primary" id="basic-button">
+            <Button onClick={handleMenuOpen} color="primary" id="basic-button">
                 <Bolt />
             </Button>
             <Menu
@@ -62,7 +62,7 @@ export default function BasicMenu() {
                     }
                 }}
             >
-                <AdminPanel onLinkCreated={closeShortenerModal}/>
+                <AdminPanel onLinkCreated={closeShortenerModal} />
             </Dialog>
 
             <Dialog
@@ -78,8 +78,31 @@ export default function BasicMenu() {
                     }
                 }}
             >
-                <CreatePost onPostCreated={closeCreatePostModal}/>
+                <CreatePost onPostCreated={closeCreatePostModal} />
             </Dialog>
         </>
     );
 }
+
+const Button = styled.button`
+  position: fixed;
+  bottom: 6rem;
+  right: 2rem;
+  width: 3rem;
+  height: 3rem;
+  background: linear-gradient(to right, #06b6d4, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(6, 182, 212, 0.25);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 50;
+
+  &:hover {
+    background: linear-gradient(to right, #0891b2, #2563eb);
+    transform: scale(1.1);
+  }
+`
