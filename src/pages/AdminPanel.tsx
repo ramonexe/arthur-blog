@@ -33,7 +33,12 @@ export default function AdminPanel({ onLinkCreated }: AdminPanelProps) {
     const fetchLinks = async () => {
         try {
             const data = await listarLinks();
-            setLinks(data);
+            const sortedLinks = data.sort((a, b) => {
+                const dateA = new Date(a.dataCriacao).getTime();
+                const dateB = new Date(b.dataCriacao).getTime();
+                return dateB - dateA;
+            });
+            setLinks(sortedLinks);
         } catch {
             toast.error("Erro ao carregar links.");
         }
@@ -88,72 +93,70 @@ export default function AdminPanel({ onLinkCreated }: AdminPanelProps) {
 
     return (
         <ContainerEncurtador>
-            <div style={{ margin: "0 auto", textAlign: "center" }}>
-                <Title>Encurtar Link</Title>
+            <Title>Encurtar Link</Title>
 
-                <div style={{ marginBottom: "1rem", margin: "0 auto" }}>
-                    <Searchinput
-                        value={search}
-                        onChange={e => setSearch(e.target.value)}
-                        placeholder="Buscar por URL, código ou título"
-                    />
-                </div>
-
-                <InputsContainer>
-                    <Input
-                        value={url}
-                        onChange={e => setUrl(e.target.value)}
-                        placeholder="Cole a URL aqui"
-                        required
-                    />
-                    <Input
-                        value={titulo}
-                        onChange={e => setTitulo(e.target.value)}
-                        placeholder="Título (opcional)"
-                    />
-                    <Input
-                        value={codigo}
-                        onChange={e => setCodigo(e.target.value)}
-                        placeholder="Código"
-                        required
-                    />
-                </InputsContainer>
-
-                <ButtonsContainer>
-                    <Button
-                        backgroundColor="#0084ff"
-                        hoverBackgroundColor="#0060b9"
-                        activeBackgroundColor="#004381"
-                        alwaysShowText
-                        fullWidth
-                        icon={<Plus />}
-                        onClick={handleSubmit}
-                        disabled={!url || !codigo}
-                    >
-                        Encurtar
-                    </Button>
-
-                    {onLinkCreated && (
-                        <Button
-                            backgroundColor="#666666"
-                            hoverBackgroundColor="#555555"
-                            activeBackgroundColor="#444444"
-                            onClick={onLinkCreated}
-                            fullWidth
-                        >
-                            Cancelar
-                        </Button>
-                    )}
-                </ButtonsContainer>
-
-                <LinksContainer>
-                    {filteredLinks.map(link => (
-                        <LinkCard key={link.codigo} link={link} onDelete={handleDelete} />
-                    ))}
-                </LinksContainer>
-
-                <ToastContainer />
+            <div style={{ marginBottom: "1rem", margin: "0 auto" }}>
+                <Searchinput
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    placeholder="Buscar por URL, código ou título"
+                />
             </div>
+
+            <InputsContainer>
+                <Input
+                    value={url}
+                    onChange={e => setUrl(e.target.value)}
+                    placeholder="Cole a URL aqui"
+                    required
+                />
+                <Input
+                    value={titulo}
+                    onChange={e => setTitulo(e.target.value)}
+                    placeholder="Título (opcional)"
+                />
+                <Input
+                    value={codigo}
+                    onChange={e => setCodigo(e.target.value)}
+                    placeholder="Código"
+                    required
+                />
+            </InputsContainer>
+
+            <ButtonsContainer>
+                <Button
+                    backgroundColor="#0084ff"
+                    hoverBackgroundColor="#0060b9"
+                    activeBackgroundColor="#004381"
+                    alwaysShowText
+                    fullWidth
+                    icon={<Plus />}
+                    onClick={handleSubmit}
+                    disabled={!url || !codigo}
+                >
+                    Encurtar
+                </Button>
+
+                {onLinkCreated && (
+                    <Button
+                        backgroundColor="#666666"
+                        hoverBackgroundColor="#555555"
+                        activeBackgroundColor="#444444"
+                        onClick={onLinkCreated}
+                        fullWidth
+                    >
+                        Cancelar
+                    </Button>
+                )}
+            </ButtonsContainer>
+
+            <LinksContainer>
+                {filteredLinks.map(link => (
+                    <LinkCard key={link.codigo} link={link} onDelete={handleDelete} />
+                ))}
+            </LinksContainer>
+
+            <ToastContainer />
         </ContainerEncurtador>
     );
 }
@@ -162,6 +165,14 @@ const Title = styled.h1`
     margin-bottom: 1rem;
     color: #0084ff;
     font-size: 1.5rem;
+
+    @media (max-width: 768px) {
+        font-size: 1.2rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 1rem;
+    }
 `;
 
 const ButtonsContainer = styled.div`
@@ -179,6 +190,7 @@ const InputsContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    overflow-x: hidden;
     gap: 0.5rem;
     margin-bottom: 1rem;
 
@@ -190,7 +202,7 @@ const InputsContainer = styled.div`
 const ContainerEncurtador = styled.div`
   padding: 1rem;
   margin: 10px;
-  overflow: hidden;
+  overflow-x: hidden;
   background: rgb(7, 8, 12);
   color: #ffffff;
   border-radius: 8px;
@@ -199,12 +211,10 @@ const ContainerEncurtador = styled.div`
   width: 90vw;
   
   @media (max-width: 768px) {
-    padding: 1rem;
     width: 85vw;
   }
 
     @media (max-width: 480px) {
-    padding: 1rem;
     width: 80vw;
     }
 `;

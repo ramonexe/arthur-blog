@@ -57,7 +57,8 @@ export default function BasicMenu() {
                 PaperProps={{
                     style: {
                         backgroundColor: 'transparent',
-                        boxShadow: 'none'
+                        boxShadow: 'none',
+                        overflow: 'hidden'
                     }
                 }}
             >
@@ -72,7 +73,8 @@ export default function BasicMenu() {
                 PaperProps={{
                     style: {
                         backgroundColor: 'transparent',
-                        boxShadow: 'none'
+                        boxShadow: 'none',
+                        overflow: 'hidden'
                     }
                 }}
             >

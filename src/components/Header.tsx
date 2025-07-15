@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { Menu, MessageCircleMore, Twitter, X, Youtube } from "lucide-react"
 import TrueFocusLogo from "./Layout/TrueFocusLogo"
@@ -146,6 +146,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const navigate = useNavigate();
   const location = useLocation();
+  const headerRef = useRef<HTMLElement>(null);
 
   const handleLogoClick = () => {
     navigate('/');
@@ -154,6 +155,22 @@ export function Header() {
 
   const isCoursePage = location.pathname === '/curso';
   const isHomePage = location.pathname === '/';
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -196,7 +213,7 @@ export function Header() {
   }
 
   return (
-    <HeaderContainer $isScrolled={isScrolled} $isHome={isHomePage}>
+    <HeaderContainer ref={headerRef} $isScrolled={isScrolled} $isHome={isHomePage}>
       <Container>
         <Nav>
           <Logo onClick={handleLogoClick}>

@@ -178,6 +178,7 @@ const ButtonsContainer = styled.div`
 const Container = styled.div`
   padding: 1rem;
   margin: 10px;
+  overflow-x: hidden;
   background: rgb(7, 8, 12);
   color: #ffffff;
   border-radius: 8px;
@@ -189,14 +190,19 @@ const Container = styled.div`
     margin-bottom: 1rem;
     color: #0084ff;
   }
-  
-  @media (max-width: 768px) {
-    padding: 1rem;
-    width: 95vw;
-    h1 {
+
+    @media (max-width: 768px) {
+    margin: 0 auto;
+    width: 100%;
+        h1 {
       font-size: 1.5rem;
     }
   }
+
+    @media (max-width: 480px) {
+    margin: 0 auto;
+    width: 100%;
+    }
 `;
 
 const Form = styled.form`

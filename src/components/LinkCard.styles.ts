@@ -14,14 +14,38 @@ export const Container = styled.div`
 export const Subtitle = styled.h1`
   margin: 0 0 0.5rem;
   font-weight: 800;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+  }
 `;
 
 export const Title = styled.h4`
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 export const ShortUrl = styled.a`
   color: #007bff;
   text-decoration: none;
   display: block;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 `;
