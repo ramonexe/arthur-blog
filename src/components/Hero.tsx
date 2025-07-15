@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { Play, ArrowRight, TrendingUp } from "lucide-react"
+import AnimatedBackground from "./Layout/AnimatedBackground"
 
 const HeroSection = styled.section`
   min-height: 70vh;
@@ -14,54 +15,10 @@ const HeroSection = styled.section`
   border-image: linear-gradient(90deg, #123788, #00c3ff, #123788) 1;
 `
 
-const BackgroundOverlay = styled.div`
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, rgba(1, 22, 26, 0.1), rgba(6, 12, 22, 0.1));
-`
-
-const AnimatedBg1 = styled.div`
-  position: absolute;
-  top: 5rem;
-  left: 2.5rem;
-  width: 5rem;
-  height: 5rem;
-  background: rgba(5, 69, 80, 0.2);
-  border-radius: 50%;
-  filter: blur(40px);
-  animation: pulse 2s infinite;
-`
-
-const AnimatedBg2 = styled.div`
-  position: absolute;
-  bottom: 5rem;
-  right: 2.5rem;
-  width: 8rem;
-  height: 8rem;
-  background: rgba(25, 55, 104, 0.2);
-  border-radius: 50%;
-  filter: blur(40px);
-  animation: pulse 2s infinite;
-  animation-delay: 1s;
-`
-
-const AnimatedBg3 = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 25%;
-  width: 4rem;
-  height: 4rem;
-  background: rgba(47, 16, 75, 0.2);
-  border-radius: 50%;
-  filter: blur(40px);
-  animation: pulse 2s infinite;
-  animation-delay: 0.5s;
-`
-
 const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 4rem 1rem;
   text-align: center;
   position: relative;
   z-index: 10;
@@ -185,10 +142,7 @@ export function Hero() {
 
     return (
         <HeroSection id="home">
-            <BackgroundOverlay />
-            <AnimatedBg1 />
-            <AnimatedBg2 />
-            <AnimatedBg3 />
+            <AnimatedBackground variant="default" showOverlay={true} />
 
             <Container>
                 <Content $isVisible={isVisible}>
@@ -199,7 +153,7 @@ export function Hero() {
 
                     <Title>
                         Domine o mundo das
-                        <GradientText>Criptomoedas & NFTs</GradientText>
+                        <GradientText>Crypto & NFTs</GradientText>
                     </Title>
 
                     <Subtitle>

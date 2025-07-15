@@ -2,24 +2,14 @@ import { useEffect, useState } from 'react';
 import { listarPosts, Post } from '../api/PostService';
 import PostCard from '../components/PostCard';
 import styled from 'styled-components';
-import TrueFocus from '../components/Layout/TrueFocus';
 import ScrambledText from '../components/Layout/ScrambleText';
-import Noise from '../components/Layout/Noise';
-import { Button } from 'dynamix-button';
-import { BookOpenText, MessageCircleMore, Youtube } from 'lucide-react';
+import AnimatedBackground from '../components/Layout/AnimatedBackground';
 import { BarLoader } from 'react-spinners';
 import { Helmet } from 'react-helmet'
-import ShinyText from '../components/Layout/ShinyText';
-import { useNavigate } from 'react-router-dom';
 
 export default function Inicio() {
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
-    const navigate = useNavigate();
-
-    const handleCursoClick = () => {
-        navigate('/curso');
-    };
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -53,18 +43,15 @@ export default function Inicio() {
     return (
         <>
             <Helmet>
-                <title>Início – Arthur Garcia Blog</title>
-                <meta name="description" content="ARTHUR GARCIA CRYPTO – NFTs, Airdrops e renda extra." />
+                <title>Início - ARTHUR GARCIA CRYPTO</title>
+                <meta name="description" content="Fique por dentro da atualidade no mundo de Crypto e NFTs" />
+                <meta property="og:title" content="Crypto & NFTs - ARTHUR GARCIA CRYPTO" />
+                <meta property="og:description" content="Fique por dentro da atualidade no mundo de Crypto e NFTs" />
+                <meta property="og:image" content="/ArthurGarciaCrypto.png" />
             </Helmet>
             <Banner>
-                <TrueFocus
-                    sentence="ARTHUR GARCIA CRYPTO"
-                    manualMode={false}
-                    blurAmount={5}
-                    borderColor="#0099ff"
-                    animationDuration={2}
-                    pauseBetweenAnimations={1}
-                />
+                <AnimatedBackground variant="minimal" showOverlay={true} />
+                <Title>ARTHUR GARCIA CRYPTO</Title>
                 <ScrambledText
                     className="scrambled-text-demo"
                     radius={50}
@@ -73,82 +60,35 @@ export default function Inicio() {
                     scrambleChars={".:"}>
                     QUER POUPAR SEU TEMPO EM CRYPTO E NÃO PERDER NENHUMA CALL? <br /> ACOMPANHE AGORA E RECEBA DICAS EXCLUSIVAS QUASE TODOS OS DIAS!
                 </ScrambledText>
-                <Noise
-                    patternSize={250}
-                    patternScaleX={2}
-                    patternScaleY={2}
-                    patternRefreshInterval={2}
-                    patternAlpha={15}
-                />
             </Banner >
             <Container>
-                <ButtonsWrapper>
-                    <Button
-                        fullWidth
-                        alwaysShowText
-                        icon={<Youtube />}
-                        size="lg"
-                        backgroundColor="#131518"
-                        borderColor='#e93630b2'
-                        hoverBackgroundColor="#1d2125"
-                        activeBackgroundColor="#8f2310"
-                        onClick={() => window.open('https://www.youtube.com/@arthurgarciacrypto', '_blank')}
-                    >
-                        <ShinyText text="YOUTUBE" disabled={false} speed={3} className='custom-class' />
-                    </Button>
-                    <Button
-                        fullWidth
-                        alwaysShowText
-                        icon={<BookOpenText />}
-                        size="lg"
-                        backgroundColor="#131518"
-                        borderColor='#00c3ffb3'
-                        hoverBackgroundColor="#1d2125"
-                        activeBackgroundColor="#123788"
-                        onClick={handleCursoClick}
-                    >
-                        <ShinyText text="CURSO" disabled={false} speed={3} className='custom-class' />
-                    </Button>
-                    <Button
-                        fullWidth
-                        alwaysShowText
-                        icon={<MessageCircleMore />}
-                        size="lg"
-                        backgroundColor="#131518"
-                        borderColor='#128c7ebc'
-                        hoverBackgroundColor="#1d2125"
-                        activeBackgroundColor="#075E54"
-                        onClick={() => window.open('https://chat.whatsapp.com/BXgit8Sg7xQ6KMgIhZ0rSX', '_blank')}
-                    >
-                        <ShinyText text="WHATSAPP" disabled={false} speed={3} className='custom-class' />
-                    </Button>
-                </ButtonsWrapper>
                 <h3>OPORTUNIDADES RECENTES</h3>
-                <Grid>
-                    {Array.isArray(posts) && posts.length > 0 ? (
-                        posts.map(post => (
+                {Array.isArray(posts) && posts.length > 0 ? (
+                    posts.map(post => (
+                        <Grid>
                             <PostCard key={post.id} post={post} />
-                        ))
-                    ) : (
+                        </Grid>
+                    ))
+                ) : (
+                    <div style={{ textAlign: 'center', width: '100%', color: '#666', height: '30vh', marginTop: '2rem' }}>
                         <p>Nenhum post encontrado.</p>
-                    )}
-                </Grid>
+                    </div>
+                )}
             </Container>
         </>
     );
 }
 
-const ButtonsWrapper = styled.div`
-  display: flex;
-  gap: 3rem;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 2rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 1rem;
-  }
+const Title = styled.h1`
+    font-size: 6rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    
+    @media (max-width: 768px) {
+        font-size: 1.5rem;
+    }
 `
 
 const LoadingContainer = styled.div`
@@ -159,17 +99,19 @@ const LoadingContainer = styled.div`
 `;
 
 const Banner = styled.div`
-    background: #08080883;
     display: flex;
     height: 70vh;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgb(9, 11, 14) 0%, rgb(14, 21, 32) 50%, rgb(9, 11, 14) 100%);
     border-bottom: 4px solid;
     border-image: linear-gradient(90deg, #123788, #00c3ff, #123788) 1;
 
     @media (max-width: 768px) {
-        padding: 0;
+        height: 40vh;
     }
 `;
 

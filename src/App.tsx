@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
 import Inicio from './pages/Inicio'
 import PostDetail from './pages/PostDetail'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import Terms from './pages/Terms'
 import styled from 'styled-components'
 import ClickSpark from './components/Layout/ClickSpark'
 import Login from './pages/Login'
@@ -9,6 +11,8 @@ import { ToastContainer } from 'react-toastify'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import CursoPage from './pages/CursoPage'
 import { Header } from './components/Header'
+import { Footer } from './components/Footer'
+import { ScrollToTop } from './components/ScrollToTop'
 
 function AppContent() {
   const { user } = useAuth();
@@ -27,6 +31,8 @@ function AppContent() {
         <Route path="/curso" element={<CursoPage />} />
         <Route path="/adm" element={<Login />} />
         <Route path="/posts/:id" element={<PostDetail />} />
+        <Route path="/privacidade" element={<PrivacyPolicy />} />
+        <Route path="/termos" element={<Terms />} />
       </Routes>
       {user && (
         <FixedButton>
@@ -34,6 +40,8 @@ function AppContent() {
         </FixedButton>
       )}
       <ToastContainer />
+      <Footer />
+      <ScrollToTop />
     </ClickSpark>
   )
 }

@@ -1,17 +1,25 @@
 import { useState, useEffect } from "react"
 import styled from "styled-components"
-import { Menu, X } from "lucide-react"
+import { Menu, MessageCircleMore, Twitter, X, Youtube } from "lucide-react"
 import TrueFocusLogo from "./Layout/TrueFocusLogo"
 import { useLocation, useNavigate } from "react-router-dom"
 
-const HeaderContainer = styled.header<{ $isScrolled: boolean }>`
+const HeaderContainer = styled.header<{ $isScrolled: boolean; $isHome: boolean }>`
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 50;
   transition: all 0.3s ease;
-  background: ${(props) => (props.$isScrolled ? "rgba(9, 11, 14, 0.849)" : "transparent")};
-  backdrop-filter: ${(props) => (props.$isScrolled ? "blur(8px)" : "none")};
+
+  ${(props) => props.$isHome && `
+    background: ${props.$isScrolled ? 'rgba(9, 11, 14, 0.95)' : 'transparent'};
+    backdrop-filter: blur(10px);
+  `}
+
+  ${(props) => !props.$isHome && `
+    background: ${props.$isScrolled ? 'rgba(9, 11, 14, 0.849)' : 'transparent'};
+    backdrop-filter: blur(10px);
+  `}
 `
 
 const Container = styled.div`
@@ -30,6 +38,12 @@ const Logo = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 `
 
 const DesktopNav = styled.nav`
@@ -101,111 +115,188 @@ const MobileNavButton = styled.button`
   }
 `
 
+const SocialLinks = styled.div`
+  display: flex;
+  gap: 1rem;
+`
+
+const SocialLink = styled.a`
+  display: flex;
+  background: #66666639;
+  border-radius: 50%;
+  padding: 0.3rem;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  & > svg {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &:hover {
+    background: #22d3ee58;
+    transform: translateY(-2px);
+  }
+`
+
 export function Header() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
-    const [isScrolled, setIsScrolled] = useState(false)
-    const navigate = useNavigate();
-    const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const handleLogoClick = () => {
-        navigate('/');
-    };
+  const handleLogoClick = () => {
+    navigate('/');
+    setIsMenuOpen(false);
+  };
 
-    const isCoursePage = location.pathname === '/curso';
+  const isCoursePage = location.pathname === '/curso';
+  const isHomePage = location.pathname === '/';
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50)
-        }
-        window.addEventListener("scroll", handleScroll)
-        return () => window.removeEventListener("scroll", handleScroll)
-    }, [])
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
 
-    const scrollToSection = (sectionId: string) => {
-        const element = document.getElementById(sectionId)
-        if (element) {
-            element.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-            })
-        }
-        setIsMenuOpen(false)
+      if (isHomePage) {
+        setIsScrolled(scrollY > 100);
+      } else {
+        setIsScrolled(scrollY > 50);
+      }
     }
 
-    const handleNavigation = (path: string) => {
-        navigate(path);
-        setIsMenuOpen(false);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [isHomePage])
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      })
     }
+    setIsMenuOpen(false)
+  }
 
-    const handleContact = () => {
-        if (location.pathname === '/') {
-            scrollToSection("contact");
-        } else {
-            navigate('/#contact');
-        }
-        setIsMenuOpen(false);
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setIsMenuOpen(false);
+  }
+
+  const handleContact = () => {
+    if (location.pathname === '/') {
+      scrollToSection("contact");
+    } else {
+      navigate('/#contact');
     }
+    setIsMenuOpen(false);
+  }
 
-    return (
-        <HeaderContainer $isScrolled={isScrolled}>
-            <Container>
-                <Nav>
-                    <Logo onClick={handleLogoClick}>
-                        <TrueFocusLogo
-                            sentence="ARTHUR GARCIA CRYPTO"
-                            manualMode={false}
-                            blurAmount={5}
-                            borderColor="#0099ff"
-                            animationDuration={2}
-                            pauseBetweenAnimations={1}
-                        />
-                    </Logo>
+  return (
+    <HeaderContainer $isScrolled={isScrolled} $isHome={isHomePage}>
+      <Container>
+        <Nav>
+          <Logo onClick={handleLogoClick}>
+            <TrueFocusLogo
+              sentence="ARTHUR GARCIA CRYPTO"
+              manualMode={false}
+              blurAmount={5}
+              borderColor="#0099ff"
+              animationDuration={2}
+              pauseBetweenAnimations={1}
+            />
+          </Logo>
 
-                    <DesktopNav>
-                        {isCoursePage ? (
-                            // Links para página de curso
-                            <>
-                                <NavButton onClick={() => scrollToSection("home")}>Início</NavButton>
-                                <NavButton onClick={() => scrollToSection("about")}>Sobre</NavButton>
-                                <NavButton onClick={() => scrollToSection("features")}>Recursos</NavButton>
-                                <NavButton onClick={() => scrollToSection("pricing")}>Preços</NavButton>
-                                <NavButton onClick={() => scrollToSection("testimonials")}>Depoimentos</NavButton>
-                            </>
-                        ) : (
-                            // Links para outras páginas
-                            <>
-                                <NavButton onClick={() => handleNavigation('/')}>Início</NavButton>
-                                <NavButton onClick={() => handleNavigation('/curso')}>Curso</NavButton>
-                                <NavButton onClick={handleContact}>Contato</NavButton>
-                            </>
-                        )}
-                    </DesktopNav>
+          <DesktopNav>
+            {isCoursePage ? (
+              <>
+                <NavButton onClick={() => handleNavigation('/')}>Início</NavButton>
+                <NavButton onClick={() => scrollToSection("about")}>Sobre</NavButton>
+                <NavButton onClick={() => scrollToSection("features")}>Recursos</NavButton>
+                <NavButton onClick={() => scrollToSection("pricing")}>Preços</NavButton>
+                <NavButton onClick={() => scrollToSection("testimonials")}>Depoimentos</NavButton>
+                <SocialLinks>
+                  <SocialLink href="https://chat.whatsapp.com/BXgit8Sg7xQ6KMgIhZ0rSX" target="_blank" rel="noopener noreferrer">
+                    <MessageCircleMore size={20} color="#bebebe" />
+                  </SocialLink>
+                  <SocialLink href="https://x.com/arthurgarciak" target="_blank" rel="noopener noreferrer">
+                    <Twitter size={20} color="#bebebe" />
+                  </SocialLink>
+                  <SocialLink href="https://www.youtube.com/@arthurgarciacrypto" target="_blank" rel="noopener noreferrer">
+                    <Youtube size={20} color="#bebebe" />
+                  </SocialLink>
+                </SocialLinks>
+              </>
+            ) : (
+              <>
+                <NavButton onClick={() => handleNavigation('/')}>Início</NavButton>
+                <NavButton onClick={() => handleNavigation('/curso')}>Curso</NavButton>
+                <NavButton onClick={handleContact}>Contato</NavButton>
+                <SocialLinks>
+                  <SocialLink href="https://chat.whatsapp.com/BXgit8Sg7xQ6KMgIhZ0rSX" target="_blank" rel="noopener noreferrer">
+                    <MessageCircleMore size={20} color="#bebebe" />
+                  </SocialLink>
+                  <SocialLink href="https://x.com/arthurgarciak" target="_blank" rel="noopener noreferrer">
+                    <Twitter size={20} color="#bebebe" />
+                  </SocialLink>
+                  <SocialLink href="https://www.youtube.com/@arthurgarciacrypto" target="_blank" rel="noopener noreferrer">
+                    <Youtube size={20} color="#bebebe" />
+                  </SocialLink>
+                </SocialLinks>
+              </>
+            )}
+          </DesktopNav>
 
-                    <MobileMenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                    </MobileMenuButton>
-                </Nav>
+          <MobileMenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </MobileMenuButton>
+        </Nav>
 
-                <MobileNav $isOpen={isMenuOpen}>
-                    <MobileNavList>
-                        {isCoursePage ? (
-                            <>
-                                <MobileNavButton onClick={() => scrollToSection("home")}>Início</MobileNavButton>
-                                <MobileNavButton onClick={() => scrollToSection("about")}>Sobre</MobileNavButton>
-                                <MobileNavButton onClick={() => scrollToSection("features")}>Recursos</MobileNavButton>
-                                <MobileNavButton onClick={() => scrollToSection("pricing")}>Preços</MobileNavButton>
-                                <MobileNavButton onClick={() => scrollToSection("testimonials")}>Depoimentos</MobileNavButton>
-                            </>
-                        ) : (
-                            <>
-                                <MobileNavButton onClick={() => handleNavigation('/')}>Início</MobileNavButton>
-                                <MobileNavButton onClick={() => handleNavigation('/curso')}>Curso</MobileNavButton>
-                                <MobileNavButton onClick={handleContact}>Contato</MobileNavButton>
-                            </>
-                        )}
-                    </MobileNavList>
-                </MobileNav>
-            </Container>
-        </HeaderContainer>
-    )
+        <MobileNav $isOpen={isMenuOpen}>
+          <MobileNavList>
+            {isCoursePage ? (
+              <>
+                <MobileNavButton onClick={() => scrollToSection("home")}>Início</MobileNavButton>
+                <MobileNavButton onClick={() => scrollToSection("about")}>Sobre</MobileNavButton>
+                <MobileNavButton onClick={() => scrollToSection("features")}>Recursos</MobileNavButton>
+                <MobileNavButton onClick={() => scrollToSection("pricing")}>Preços</MobileNavButton>
+                <MobileNavButton onClick={() => scrollToSection("testimonials")}>Depoimentos</MobileNavButton>
+                <SocialLinks>
+                  <SocialLink href="https://chat.whatsapp.com/BXgit8Sg7xQ6KMgIhZ0rSX" target="_blank" rel="noopener noreferrer">
+                    <MessageCircleMore size={20} color="#bebebe" />
+                  </SocialLink>
+                  <SocialLink href="https://x.com/arthurgarciak" target="_blank" rel="noopener noreferrer">
+                    <Twitter size={20} color="#bebebe" />
+                  </SocialLink>
+                  <SocialLink href="https://www.youtube.com/@arthurgarciacrypto" target="_blank" rel="noopener noreferrer">
+                    <Youtube size={20} color="#bebebe" />
+                  </SocialLink>
+                </SocialLinks>
+              </>
+            ) : (
+              <>
+                <MobileNavButton onClick={() => handleNavigation('/')}>Início</MobileNavButton>
+                <MobileNavButton onClick={() => handleNavigation('/curso')}>Curso</MobileNavButton>
+                <MobileNavButton onClick={handleContact}>Contato</MobileNavButton>
+                <SocialLinks>
+                  <SocialLink href="https://chat.whatsapp.com/BXgit8Sg7xQ6KMgIhZ0rSX" target="_blank" rel="noopener noreferrer">
+                    <MessageCircleMore size={20} color="#bebebe" />
+                  </SocialLink>
+                  <SocialLink href="https://x.com/arthurgarciak" target="_blank" rel="noopener noreferrer">
+                    <Twitter size={20} color="#bebebe" />
+                  </SocialLink>
+                  <SocialLink href="https://www.youtube.com/@arthurgarciacrypto" target="_blank" rel="noopener noreferrer">
+                    <Youtube size={20} color="#bebebe" />
+                  </SocialLink>
+                </SocialLinks>
+              </>
+            )}
+          </MobileNavList>
+        </MobileNav>
+      </Container>
+    </HeaderContainer>
+  )
 }

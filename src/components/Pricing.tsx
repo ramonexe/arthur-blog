@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
-import { Check, Star, Zap } from "lucide-react"
+import { Check, Zap } from "lucide-react"
 
 const PricingSection = styled.section`
   padding: 5rem 0;
@@ -49,148 +49,171 @@ const Subtitle = styled.p`
   line-height: 1.6;
 `
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  max-width: 72rem;
+const CardContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  max-width: 40rem;
   margin: 0 auto;
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
 `
 
-const Card = styled.div<{ $popular: boolean; $index: number; $isVisible: boolean }>`
+const Card = styled.div<{ $isVisible: boolean }>`
   position: relative;
-  background: rgba(17, 24, 39, 0.5);
-  backdrop-filter: blur(8px);
-  border: 1px solid ${(props) => (props.$popular ? "#00c3ff" : "#374151")};
-  border-radius: 1rem;
+  width: 100%;
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(12px);
+  border: 2px solid #00c3ff;
+  border-radius: 1.5rem;
   padding: 2rem;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
   cursor: pointer;
-  box-shadow: ${(props) => (props.$popular ? "0 25px 50px rgba(6, 182, 212, 0.25)" : "none")};
-  animation: ${(props) => (props.$isVisible ? "fadeInUp 0.6s ease-out forwards" : "none")};
-  animation-delay: ${(props) => props.$index * 200}ms;
+  box-shadow: 0 25px 50px rgba(6, 182, 212, 0.3);
+  animation: ${(props) => (props.$isVisible ? "fadeInUp 0.8s ease-out forwards" : "none")};
 
   &:hover {
-    transform: scale(1.05);
-    border-color: ${(props) => (props.$popular ? "#00c3ff" : "rgba(6, 182, 212, 0.5)")};
+    transform: translateY(-8px) scale(1.02);
+    border-color: #22d3ee;
+    box-shadow: 0 35px 70px rgba(6, 182, 212, 0.4);
   }
-`
 
-const PopularBadge = styled.div`
-  position: absolute;
-  top: -1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(to right, #00c3ff, #123788);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+  @media (max-width: 640px) {
+    padding: 2rem 1.5rem;
+  }
 `
 
 const CardHeader = styled.div`
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 `
 
 const PlanName = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   color: white;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+
+  @media (max-width: 640px) {
+    font-size: 1.75rem;
+  }
 `
 
 const PlanDescription = styled.p`
   color: #9ca3af;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  line-height: 1.5;
 `
 
 const PriceContainer = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 `
 
 const Price = styled.span`
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: white;
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #00c3ff, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  @media (max-width: 640px) {
+    font-size: 2.75rem;
+  }
 `
 
 const OriginalPrice = styled.span`
-  color: #9ca3af;
+  color: #6b7280;
   text-decoration: line-through;
-  margin-left: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
 `
 
 const FeatureList = styled.ul`
   list-style: none;
   padding: 0;
-  margin: 0 0 2rem 0;
+  margin: 0 0 3rem 0;
 `
 
 const FeatureItem = styled.li`
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 0.5rem 0;
 `
 
 const CheckIcon = styled.div`
-  width: 1.25rem;
-  height: 1.25rem;
-  background: linear-gradient(to right, #00c3ff, #123788);
+  width: 1.5rem;
+  height: 1.5rem;
+  background: linear-gradient(135deg, #00c3ff, #22d3ee);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  margin-top: 0.125rem;
+  box-shadow: 0 4px 8px rgba(6, 182, 212, 0.3);
 `
 
 const FeatureText = styled.span`
-  color: #d1d5db;
+  color: #e5e7eb;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 500;
 `
 
-const PlanButton = styled.button<{ $popular: boolean }>`
+const PlanButton = styled.button`
   width: 100%;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
+  padding: 1.25rem 2rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 1.125rem;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #00c3ff, #22d3ee);
+  color: white;
+  box-shadow: 0 10px 25px rgba(6, 182, 212, 0.35);
+  position: relative;
+  overflow: hidden;
 
-  ${(props) =>
-    props.$popular
-      ? `
-    background: linear-gradient(to right, #00c3ff, #123788);
-    color: white;
-    box-shadow: 0 10px 25px rgba(6, 182, 212, 0.25);
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
 
-    &:hover {
-      background: linear-gradient(to right, #0891b2, #2563eb);
+  &:hover {
+    background: linear-gradient(135deg, #0891b2, #06b6d4);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(6, 182, 212, 0.45);
+
+    &::before {
+      left: 100%;
     }
-  `
-      : `
-    border: 2px solid #4b5563;
-    color: white;
-    background: none;
+  }
 
-    &:hover {
-      border-color: #00c3ff;
-      background: rgba(6, 182, 212, 0.1);
-    }
-  `}
+  &:active {
+    transform: translateY(0);
+  }
+
+  svg {
+    height: 1.6rem;
+    width: 1.6rem;
+  }
 `
 
 const Footer = styled.div`
@@ -233,53 +256,20 @@ export function Pricing() {
     return () => observer.disconnect()
   }, [])
 
-  const plans = [
-    {
-      name: "Básico",
-      price: "R$ 297",
-      originalPrice: "R$ 497",
-      description: "Perfeito para iniciantes",
-      features: [
-        "Acesso ao curso completo",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-      ],
-      popular: false,
-    },
-    {
-      name: "Premium",
-      price: "R$ 497",
-      originalPrice: "R$ 797",
-      description: "Mais popular entre os alunos",
-      features: [
-        "Tudo do plano Básico",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-      ],
-      popular: true,
-    },
-    {
-      name: "VIP",
-      price: "R$ 997",
-      originalPrice: "R$ 1.497",
-      description: "Para quem quer resultados máximos",
-      features: [
-        "Tudo do plano Premium",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-      ],
-      popular: false,
-    },
-  ]
+  const plan = {
+    name: "Curso Completo",
+    price: "R$ 497",
+    originalPrice: "R$ 997",
+    description: "Tudo que você precisa para dominar o mundo das criptomoedas",
+    features: [
+      "Acesso vitalício ao curso completo",
+      "Mais de 50 aulas em vídeo",
+      "Material didático exclusivo",
+      "Comunidade privada no Telegram e Whatsapp",
+      "Análises técnicas semanais",
+      "Suporte direto com o Arthur"
+    ]
+  }
 
   return (
     <PricingSection id="pricing" ref={sectionRef}>
@@ -287,63 +277,53 @@ export function Pricing() {
         <Content $isVisible={isVisible}>
           <Header>
             <Title>
-              Escolha seu
-              <GradientText> plano</GradientText>
+              Investimento no seu
+              <GradientText> futuro</GradientText>
             </Title>
             <Subtitle>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua.
+              Uma oportunidade única de transformar sua vida financeira com conhecimento sólido e estratégias comprovadas no mercado de criptomoedas.
             </Subtitle>
           </Header>
 
-          <Grid>
-            {plans.map((plan, index) => (
-              <Card key={index} $popular={plan.popular} $index={index} $isVisible={isVisible}>
-                {plan.popular && (
-                  <PopularBadge>
-                    <Star size={16} />
-                    <span>Mais Popular</span>
-                  </PopularBadge>
-                )}
+          <CardContainer>
+            <Card $isVisible={isVisible}>
+              <CardHeader>
+                <PlanName>{plan.name}</PlanName>
+                <PlanDescription>{plan.description}</PlanDescription>
+                <PriceContainer>
+                  <Price>{plan.price}</Price>
+                  <OriginalPrice>{plan.originalPrice}</OriginalPrice>
+                </PriceContainer>
+              </CardHeader>
 
-                <CardHeader>
-                  <PlanName>{plan.name}</PlanName>
-                  <PlanDescription>{plan.description}</PlanDescription>
-                  <PriceContainer>
-                    <Price>{plan.price}</Price>
-                    <OriginalPrice>{plan.originalPrice}</OriginalPrice>
-                  </PriceContainer>
-                </CardHeader>
+              <FeatureList>
+                {plan.features.map((feature, index) => (
+                  <FeatureItem key={index}>
+                    <CheckIcon>
+                      <Check size={14} color="white" />
+                    </CheckIcon>
+                    <FeatureText>{feature}</FeatureText>
+                  </FeatureItem>
+                ))}
+              </FeatureList>
 
-                <FeatureList>
-                  {plan.features.map((feature, featureIndex) => (
-                    <FeatureItem key={featureIndex}>
-                      <CheckIcon>
-                        <Check size={12} color="white" />
-                      </CheckIcon>
-                      <FeatureText>{feature}</FeatureText>
-                    </FeatureItem>
-                  ))}
-                </FeatureList>
-
-                <PlanButton $popular={plan.popular}>
-                  {plan.popular && <Zap size={20} />}
-                  Começar Agora
-                </PlanButton>
-              </Card>
-            ))}
-          </Grid>
+              <PlanButton>
+                <Zap size={22} />
+                Garantir Minha Vaga
+              </PlanButton>
+            </Card>
+          </CardContainer>
 
           <Footer>
-            <SecurityText>🔒 Pagamento 100% seguro • Garantia de 7 dias</SecurityText>
+            <SecurityText>🔒 Pagamento 100% seguro • Garantia incondicional de 30 dias</SecurityText>
             <PaymentMethods>
-              <span>Visa</span>
-              <span>•</span>
-              <span>Mastercard</span>
+              <span>Cartão de Crédito</span>
               <span>•</span>
               <span>PIX</span>
               <span>•</span>
-              <span>Boleto</span>
+              <span>Boleto Bancário</span>
+              <span>•</span>
+              <span>Parcelamento em até 12x</span>
             </PaymentMethods>
           </Footer>
         </Content>

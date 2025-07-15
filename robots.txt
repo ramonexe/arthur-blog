@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+
+# Páginas principais
+Allow: /
+Allow: /curso
+Allow: /posts/*
+Allow: /privacidade
+Allow: /termos
+
+# Recursos estáticos
+Allow: /assets/
+Allow: /ArthurGarciaCrypto.png
+Allow: /favicon.png
+
+# Bloquear arquivos desnecessários
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /*.json
+Disallow: /*.config.*
+Disallow: /vite.config.*
+Disallow: /package*.json
+Disallow: /tsconfig.*
+
+# Sitemap
+Sitemap: https://arthurgarciacrypto.com/sitemap.xml
+
+# Crawl delay (opcional - para não sobrecarregar o servidor)
+Crawl-delay: 1

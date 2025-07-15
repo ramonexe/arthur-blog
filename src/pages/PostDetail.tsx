@@ -54,28 +54,35 @@ const LoadingContainer = styled.div`
 `;
 
 const Container = styled.div`
-  padding: 2rem;
+  padding: 4rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
   text-align: left;
 `;
 
 const Title = styled.h1`
-  margin-bottom: 1rem;
-  color: #0084ff;
+  margin-bottom: 0.1rem;
 `;
 
 const VideoWrapper = styled.div`
   margin: 1rem 0;
   position: relative;
   padding-top: 56.25%;
+
   iframe {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
     border-radius: 12px;
+  }
+
+  @media (max-width: 768px) {
+    iframe {
+      width: 100%;
+      height: 100%;
+    }
   }
 `;
 

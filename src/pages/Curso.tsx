@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet";
-import ASCIIText from "../components/Layout/ASCIIText";
 import Container from "../components/Layout/ContainerAll";
 import styled from "styled-components";
 
@@ -11,13 +10,9 @@ export default function Curso() {
                 <meta name="description" content="ARTHUR GARCIA CRYPTO – NFTs, Airdrops e renda extra." />
             </Helmet>
             <Container>
-                <ASCIIText
-                    text='EM BREVE'
-                    enableWaves={false}
-                    asciiFontSize={7}
-                    textFontSize={32}
-                    planeBaseHeight={5}
-                />
+                <h1>Curso de Criptomoedas e NFTs</h1>
+                <p>Aprenda tudo sobre o mercado de criptomoedas e NFTs com nosso curso completo.</p>
+                <p>Inscreva-se agora e comece sua jornada no mundo das criptos!</p>
             </Container>
         </Main>
     );

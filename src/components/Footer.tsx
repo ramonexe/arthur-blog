@@ -151,85 +151,91 @@ const LegalLink = styled.a`
 `
 
 export function Footer() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleLogoClick = () => {
-        navigate('/');
-    };
+  const handleLogoClick = () => {
+    navigate('/');
+  };
 
-    return (
-        <FooterContainer>
-            <Container>
-                <Grid>
-                    <LogoSection>
-                        <Logo onClick={handleLogoClick}>
-                            <TrueFocusLogo
-                                sentence="ARTHUR GARCIA CRYPTO"
-                                manualMode={false}
-                                blurAmount={5}
-                                borderColor="#0099ff"
-                                animationDuration={2}
-                                pauseBetweenAnimations={1}
-                            />
-                        </Logo>
-                        <Description>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua.
-                        </Description>
-                        <SocialLinks>
-                            <SocialLink href="https://chat.whatsapp.com/BXgit8Sg7xQ6KMgIhZ0rSX" target="_blank" rel="noopener noreferrer">
-                                <MessageCircleMore size={20} color="#3cff00df" />
-                            </SocialLink>
-                            <SocialLink href="https://x.com/arthurgarciak" target="_blank" rel="noopener noreferrer">
-                                <Twitter size={20} color="#00a2ffdf" />
-                            </SocialLink>
-                            <SocialLink href="https://www.youtube.com/@arthurgarciacrypto" target="_blank" rel="noopener noreferrer">
-                                <Youtube size={20} color="#ff0000df" />
-                            </SocialLink>
-                        </SocialLinks>
-                    </LogoSection>
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  }
 
-                    <Section>
-                        <SectionTitle>Links Rápidos</SectionTitle>
-                        <LinkList>
-                            <LinkItem>
-                                <Link href="#home">Início</Link>
-                            </LinkItem>
-                            <LinkItem>
-                                <Link href="#about">Sobre</Link>
-                            </LinkItem>
-                            <LinkItem>
-                                <Link href="#features">Recursos</Link>
-                            </LinkItem>
-                            <LinkItem>
-                                <Link href="#pricing">Preços</Link>
-                            </LinkItem>
-                        </LinkList>
-                    </Section>
+  return (
+    <FooterContainer id="contact">
+      <Container>
+        <Grid>
+          <LogoSection>
+            <Logo onClick={handleLogoClick}>
+              <TrueFocusLogo
+                sentence="ARTHUR GARCIA CRYPTO"
+                manualMode={false}
+                blurAmount={5}
+                borderColor="#0099ff"
+                animationDuration={2}
+                pauseBetweenAnimations={1}
+              />
+            </Logo>
+            <Description>
+              Fique por dentro da bolha de Crypto e NFTs
+            </Description>
+            <SocialLinks>
+              <SocialLink href="https://chat.whatsapp.com/BXgit8Sg7xQ6KMgIhZ0rSX" target="_blank" rel="noopener noreferrer">
+                <MessageCircleMore size={20} color="#3cff00df" />
+              </SocialLink>
+              <SocialLink href="https://x.com/arthurgarciak" target="_blank" rel="noopener noreferrer">
+                <Twitter size={20} color="#00a2ffdf" />
+              </SocialLink>
+              <SocialLink href="https://www.youtube.com/@arthurgarciacrypto" target="_blank" rel="noopener noreferrer">
+                <Youtube size={20} color="#ff0000df" />
+              </SocialLink>
+            </SocialLinks>
+          </LogoSection>
 
-                    <Section>
-                        <SectionTitle>Contato</SectionTitle>
-                        <LinkList>
-                            <ContactItem>
-                                <Mail size={20} color="#22d3ee" />
-                                <ContactText>arthurgarciacrypto@contato.com</ContactText>
-                            </ContactItem>
-                            <ContactItem>
-                                <MapPin size={20} color="#22d3ee" />
-                                <ContactText>São Paulo, Brasil</ContactText>
-                            </ContactItem>
-                        </LinkList>
-                    </Section>
-                </Grid>
+          <Section>
+            <SectionTitle>Links Rápidos</SectionTitle>
+            <LinkList>
+              <LinkItem>
+                <Link onClick={() => handleNavigation('/')}>Início</Link>
+              </LinkItem>
+              <LinkItem>
+                <Link onClick={() => handleNavigation('/curso')}>Curso</Link>
+              </LinkItem>
+              <LinkItem>
+                <Link onClick={() => handleNavigation('/curso/#about')}>Sobre</Link>
+              </LinkItem>
+              <LinkItem>
+                <Link onClick={() => handleNavigation('/curso/#features')}>Recursos</Link>
+              </LinkItem>
+              <LinkItem>
+                <Link onClick={() => handleNavigation('/curso/#pricing')}>Preços</Link>
+              </LinkItem>
+            </LinkList>
+          </Section>
 
-                <BottomSection>
-                    <Copyright>© {new Date().getFullYear()} Arthur Garcia Crypto. Todos os direitos reservados.</Copyright>
-                    <LegalLinks>
-                        <LegalLink href="#">Política de Privacidade</LegalLink>
-                        <LegalLink href="#">Termos de Uso</LegalLink>
-                    </LegalLinks>
-                </BottomSection>
-            </Container>
-        </FooterContainer>
-    )
+          <Section>
+            <SectionTitle>Contato</SectionTitle>
+            <LinkList>
+              <ContactItem>
+                <Mail size={20} color="#22d3ee" />
+                <ContactText>arthurgarciacrypto@contato.com</ContactText>
+              </ContactItem>
+              <ContactItem>
+                <MapPin size={20} color="#22d3ee" />
+                <ContactText>São Paulo, Brasil</ContactText>
+              </ContactItem>
+            </LinkList>
+          </Section>
+        </Grid>
+
+        <BottomSection>
+          <Copyright>© {new Date().getFullYear()} Arthur Garcia Crypto. Todos os direitos reservados.</Copyright>
+          <LegalLinks>
+            <LegalLink onClick={() => navigate('/privacidade')}>Política de Privacidade</LegalLink>
+            <LegalLink onClick={() => navigate('/termos')}>Termos de Uso</LegalLink>
+          </LegalLinks>
+        </BottomSection>
+      </Container>
+    </FooterContainer>
+  )
 }
